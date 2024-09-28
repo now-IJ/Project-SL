@@ -13,17 +13,20 @@ namespace RS
         
         private PlayerControls playerControls;
         
-        [SerializeField] private Vector2 movementInput;
+        
+        [Header("Camera input")]
         [SerializeField] private Vector2 cameraInput;
+        public float cameraVerticalInput;
+        public float cameraHorizontalInput;
         
         [Header("Movement input")]
+        [SerializeField] private Vector2 movementInput;
         public float verticalInput;
         public float horizontalInput;
         public float moveAmount;
-        
-        [Header("Camera input")]
-        public float cameraVerticalInput;
-        public float cameraHorizontalInput;
+
+        [Header("Player Actions")] 
+        [SerializeField] private bool dodgeInput = false;
 
         private void Awake()
         {
@@ -67,6 +70,8 @@ namespace RS
 
                 playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
                 playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
+                playerControls.PlayerCamera.Mouse.performed += i => cameraInput = i.ReadValue<Vector2>();
+                playerControls.PlayerActions.Dodge.performed += o => dodgeInput = true;
             }
             
             playerControls.Enable();
@@ -94,10 +99,19 @@ namespace RS
 
         private void Update()
         {
+            HandleAllInputs();
+        }
+        
+        private void HandleAllInputs()
+        {
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
+            HandleDodgeInput();
         }
 
+        
+        // MOVEMENT
+        
         private void HandlePlayerMovementInput()
         {
             verticalInput = movementInput.y;
@@ -124,6 +138,19 @@ namespace RS
         {
             cameraVerticalInput = cameraInput.y;
             cameraHorizontalInput = cameraInput.x;
+        }
+
+        
+        // ACTIONS
+        
+        private void HandleDodgeInput()
+        {
+            if (dodgeInput)
+            {
+                dodgeInput = false;
+                
+                player.playerLocomotionManager.AttemptToPerformDodge();
+            }
         }
     }
 }

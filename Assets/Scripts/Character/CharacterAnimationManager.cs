@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace RS
@@ -19,6 +20,19 @@ namespace RS
         {
             character.animator.SetFloat("Horizontal", horizontalValue, 0.1f, Time.deltaTime);
             character.animator.SetFloat("Vertical", verticalValue, 0.1f, Time.deltaTime);
+        }
+
+        public virtual void PlayTargetActionAnimation(string targetAnimation, bool isPerformingAction,
+            bool applyRootMotion = true, bool canRotate = false, bool canMove = false)
+        {
+            character.animator.CrossFade(targetAnimation, 0.2f);
+            character.isPerformingAction = isPerformingAction;
+            character.applyRootMotion = applyRootMotion;
+            character.canRotate = canRotate;
+            character.canMove = canMove;
+
+            character.characterNetworkManager.NotifyServerOfActionAnimationServerRPC
+            (NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
         }
     }
 }
