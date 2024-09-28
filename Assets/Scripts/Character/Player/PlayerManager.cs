@@ -17,6 +17,9 @@ namespace RS
         {
             base.Update();
             
+            if(!IsOwner) 
+                return;
+            
             playerLocomotionManager.HandleAllMovement();
         }
     }

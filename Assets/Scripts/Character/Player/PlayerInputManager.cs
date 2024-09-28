@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace RS
 {
@@ -9,8 +10,11 @@ namespace RS
         public static PlayerInputManager instance;
         
         private PlayerControls playerControls;
-
-        [SerializeField] private Vector2 movement;
+        
+        [SerializeField] private Vector2 movementInput;
+        public float verticalInput;
+        public float horizontalInput;
+        public float moveAmount;
 
         private void Awake()
         {
@@ -52,7 +56,7 @@ namespace RS
             {
                 playerControls = new PlayerControls();
 
-                playerControls.PlayerMovement.Movement.performed += i => movement = i.ReadValue<Vector2>();
+                playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
             }
             
             playerControls.Enable();
@@ -62,5 +66,43 @@ namespace RS
         {
             SceneManager.activeSceneChanged -= OnSceneChanged;
         }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (enabled)
+            {
+                if (hasFocus)
+                {
+                    playerControls.Enable();
+                }
+                else
+                {
+                    playerControls.Disable();
+                }
+            }
+        }
+
+        private void Update()
+        {
+            HandleMovement();
+        }
+
+        private void HandleMovement()
+        {
+            verticalInput = movementInput.y;
+            horizontalInput = movementInput.x;
+
+            moveAmount = Mathf.Clamp01(Mathf.Abs(verticalInput) + Mathf.Abs(horizontalInput));
+
+            if (moveAmount <= 0.5 && moveAmount > 0)
+            {
+                moveAmount = 0.5f;
+            }
+            else if (moveAmount > 0.5f && moveAmount <= 1)
+            {
+                moveAmount = 1;
+            }
+        }
+        
     }
 }
