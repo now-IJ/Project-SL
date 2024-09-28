@@ -34,6 +34,11 @@ namespace RS
 
             yield return null;
         }
+
+        public int GetWorldSceneIndex()
+        {
+            return worldSceneIndex;
+        }
         
     }
 }
