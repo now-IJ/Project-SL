@@ -12,9 +12,16 @@ namespace RS
         private PlayerControls playerControls;
         
         [SerializeField] private Vector2 movementInput;
+        [SerializeField] private Vector2 cameraInput;
+        
+        [Header("Movement input")]
         public float verticalInput;
         public float horizontalInput;
         public float moveAmount;
+        
+        [Header("Camera input")]
+        public float cameraVerticalInput;
+        public float cameraHorizontalInput;
 
         private void Awake()
         {
@@ -57,6 +64,7 @@ namespace RS
                 playerControls = new PlayerControls();
 
                 playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+                playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
             }
             
             playerControls.Enable();
@@ -84,10 +92,11 @@ namespace RS
 
         private void Update()
         {
-            HandleMovement();
+            HandlePlayerMovementInput();
+            HandleCameraMovementInput();
         }
 
-        private void HandleMovement()
+        private void HandlePlayerMovementInput()
         {
             verticalInput = movementInput.y;
             horizontalInput = movementInput.x;
@@ -103,6 +112,11 @@ namespace RS
                 moveAmount = 1;
             }
         }
-        
+
+        private void HandleCameraMovementInput()
+        {
+            cameraVerticalInput = cameraInput.y;
+            cameraHorizontalInput = cameraInput.x;
+        }
     }
 }

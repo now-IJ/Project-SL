@@ -41,5 +41,10 @@ namespace RS
                     characterNetworkManager.networkPositionSmoothTime);
             }
         }
+
+        protected virtual void LateUpdate()
+        {
+            
+        }
     }
 }
