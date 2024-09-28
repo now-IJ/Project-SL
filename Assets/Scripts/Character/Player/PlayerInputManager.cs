@@ -9,6 +9,8 @@ namespace RS
     {
         public static PlayerInputManager instance;
         
+        public PlayerManager player;
+        
         private PlayerControls playerControls;
         
         [SerializeField] private Vector2 movementInput;
@@ -111,6 +113,11 @@ namespace RS
             {
                 moveAmount = 1;
             }
+            
+            if(player == null) 
+                return;
+            
+            player.playerAnimationManager.UpdateAnimatorMovementParameters(0, moveAmount);
         }
 
         private void HandleCameraMovementInput()

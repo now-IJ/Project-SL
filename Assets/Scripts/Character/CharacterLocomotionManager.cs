@@ -9,5 +9,10 @@ namespace RS
         {
             
         }
+
+        protected virtual void Update()
+        {
+            
+        }
     }
 }

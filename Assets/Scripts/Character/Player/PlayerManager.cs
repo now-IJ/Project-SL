@@ -4,13 +4,15 @@ namespace RS
 {
     public class PlayerManager : CharacterManager
     {
-        private PlayerLocomotionManager playerLocomotionManager;
+        [HideInInspector] public PlayerAnimationManager playerAnimationManager;
+        [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
         
         protected override void Awake()
         {
             base.Awake();
 
             playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
+            playerAnimationManager = GetComponent<PlayerAnimationManager>();
         }
 
         protected override void Update()
@@ -40,6 +42,7 @@ namespace RS
             if (IsOwner)
             {
                 PlayerCamera.instance.player = this;
+                PlayerInputManager.instance.player = this;
             }
         }
     }

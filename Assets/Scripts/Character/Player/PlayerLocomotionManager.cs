@@ -24,21 +24,42 @@ namespace RS
             player = GetComponent<PlayerManager>();
         }
 
+        protected override void Update()
+        {
+            base.Update();
+
+            if (player.IsOwner)
+            {
+                player.characterNetworkManager.verticalMovement.Value = verticalMovement;
+                player.characterNetworkManager.horizontalMovement.Value = horizontalMovement;
+                player.characterNetworkManager.moveAmount.Value = moveAmount;
+            }
+            else
+            {
+                verticalMovement = player.characterNetworkManager.verticalMovement.Value;
+                horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
+                moveAmount = player.characterNetworkManager.moveAmount.Value;
+                
+                player.playerAnimationManager.UpdateAnimatorMovementParameters(0, moveAmount);
+            }
+        }
+
         public void HandleAllMovement()
         {
             HandleGroundedMovement();
             HandleRotation();
         }
 
-        private void SetVerticalAndHorizontalInputs()
+        private void SetMovementValues()
         {
             verticalMovement = PlayerInputManager.instance.verticalInput;
             horizontalMovement = PlayerInputManager.instance.horizontalInput;
+            moveAmount = PlayerInputManager.instance.moveAmount;
         }
 
         private void HandleGroundedMovement()
         {
-            SetVerticalAndHorizontalInputs();
+            SetMovementValues();
             
             movementDirection = PlayerCamera.instance.transform.forward * verticalMovement;
             movementDirection += PlayerCamera.instance.transform.right * horizontalMovement;
