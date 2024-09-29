@@ -15,10 +15,12 @@ namespace RS
         [SerializeField] private float runningSpeed = 5;
         [SerializeField] private float sprintingSpeed = 7;
         [SerializeField] private float rotationSpeed = 15;
+        [SerializeField] private float sprintingStaminaCost = 2;
         private Vector3 movementDirection;
         private Vector3 targetRotationDirection;
 
         [Header("Dodge")] 
+        [SerializeField] private float dodgeStaminaCost = 25;
         private Vector3 rollDirection;
         
         protected override void Awake()
@@ -118,6 +120,9 @@ namespace RS
             if(player.isPerformingAction)
                 return;
             
+            if(player.playerNetworkManager.currentStamina.Value <= 0)
+                return;
+            
             // If player is moving while dodging perform a roll
             if (moveAmount > 0)
             {
@@ -136,6 +141,8 @@ namespace RS
             {
                 player.playerAnimationManager.PlayTargetActionAnimation("Back_Step_01", true, true);
             }
+
+            player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
         }
 
         public void HandleSprinting()
@@ -144,6 +151,12 @@ namespace RS
             if (player.isPerformingAction)
             {
                 player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+                return;
             }
             
             // Player can only sprint if he is already walking and not tip toeing / stationary
@@ -154,6 +167,11 @@ namespace RS
             else
             {
                 player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            if (player.playerNetworkManager.isSprinting.Value)
+            {
+                player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
             }
             
         }

@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RS
@@ -16,7 +17,6 @@ namespace RS
         public bool applyRootMotion = false;
         public bool canRotate = true;
         public bool canMove = true;
-        
         
         protected virtual void Awake()
         {
@@ -55,5 +55,6 @@ namespace RS
         {
             
         }
+        
     }
 }

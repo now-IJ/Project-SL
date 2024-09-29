@@ -11,6 +11,8 @@ namespace RS
         [Header("Network Join")] 
         [SerializeField] private bool startGameAsClient;
 
+        [HideInInspector] public PlayerUIHudManager playerUIHudManager;
+
         private void Awake()
         {
             if (instance == null)
@@ -21,6 +23,9 @@ namespace RS
             {
                 Destroy(gameObject);
             }
+
+            playerUIHudManager = GetComponentInChildren<PlayerUIHudManager>();
+
         }
 
         private void Start()
