@@ -13,6 +13,7 @@ namespace RS
         [Header("Movement Settings")]        
         [SerializeField] private float walkingSpeed = 2;
         [SerializeField] private float runningSpeed = 5;
+        [SerializeField] private float sprintingSpeed = 7;
         [SerializeField] private float rotationSpeed = 15;
         private Vector3 movementDirection;
         private Vector3 targetRotationDirection;
@@ -43,7 +44,7 @@ namespace RS
                 horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
                 moveAmount = player.characterNetworkManager.moveAmount.Value;
                 
-                player.playerAnimationManager.UpdateAnimatorMovementParameters(0, moveAmount);
+                player.playerAnimationManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
             }
         }
 
@@ -72,15 +73,22 @@ namespace RS
             movementDirection.Normalize();
             movementDirection.y = 0;
 
-            if (PlayerInputManager.instance.moveAmount > 0.5f)
+            if (player.playerNetworkManager.isSprinting.Value)
             {
-                // Running Speed
-                player.characterController.Move(movementDirection * runningSpeed * Time.deltaTime);
+                player.characterController.Move(movementDirection * (sprintingSpeed * Time.deltaTime));
             }
-            else if (PlayerInputManager.instance.moveAmount <= 0.5f)
+            else
             {
-                // Walking Speed
-                player.characterController.Move(movementDirection * walkingSpeed * Time.deltaTime);
+                if (PlayerInputManager.instance.moveAmount > 0.5f)
+                {
+                    // Running Speed
+                    player.characterController.Move(movementDirection * (runningSpeed * Time.deltaTime));
+                }
+                else if (PlayerInputManager.instance.moveAmount <= 0.5f)
+                {
+                    // Walking Speed
+                    player.characterController.Move(movementDirection * (walkingSpeed * Time.deltaTime));
+                }
             }
         }
 
@@ -129,6 +137,25 @@ namespace RS
                 player.playerAnimationManager.PlayTargetActionAnimation("Back_Step_01", true, true);
             }
         }
-        
+
+        public void HandleSprinting()
+        {
+            // Player cannot sprint when performing an action
+            if (player.isPerformingAction)
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+            
+            // Player can only sprint if he is already walking and not tip toeing / stationary
+            if (moveAmount >= 0.5f)
+            {
+                player.playerNetworkManager.isSprinting.Value = true;
+            }
+            else
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+            
+        }
     }
 }

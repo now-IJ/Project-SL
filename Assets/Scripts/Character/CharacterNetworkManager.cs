@@ -24,12 +24,16 @@ namespace RS
         public NetworkVariable<float> horizontalMovement =
             new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-        [FormerlySerializedAs("animatorVerticalParameter")] public NetworkVariable<float> verticalMovement =
+        public NetworkVariable<float> verticalMovement =
             new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
-        [FormerlySerializedAs("moveAmountParameter")] public NetworkVariable<float> moveAmount =
+        public NetworkVariable<float> moveAmount =
             new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+        [Header("Flags")] 
+        public NetworkVariable<bool> isSprinting = 
+            new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
         protected virtual void Awake()
         {
             character = GetComponent<CharacterManager>();
