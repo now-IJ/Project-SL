@@ -28,6 +28,7 @@ namespace RS
         [Header("Player Actions")] 
         [SerializeField] private bool dodgeInput = false;
         [SerializeField] private bool sprintInput = false;
+        [SerializeField] private bool jumpInput = false;
 
         private void Awake()
         {
@@ -75,6 +76,7 @@ namespace RS
                 playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
                 playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
                 playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
+                playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
             }
             
             playerControls.Enable();
@@ -166,6 +168,16 @@ namespace RS
             else
             {
                 player.playerNetworkManager.isSprinting.Value = false;
+            }
+        }
+
+        private void HandleJumpInput()
+        {
+            if (jumpInput = true)
+            {
+                jumpInput = false;
+                
+                player.playerLocomotionManager.AttemptToPerformJump();
             }
         }
     }

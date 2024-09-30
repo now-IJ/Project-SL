@@ -23,6 +23,9 @@ namespace RS
         [SerializeField] private float dodgeStaminaCost = 25;
         private Vector3 rollDirection;
         
+        [Header("Jump")]
+        [SerializeField] private float jumpStaminaCost = 25;
+        
         protected override void Awake()
         {
             base.Awake();
@@ -114,6 +117,37 @@ namespace RS
             Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
             transform.rotation = targetRotation;
         }
+        
+        public void HandleSprinting()
+        {
+            // Player cannot sprint when performing an action
+            if (player.isPerformingAction)
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+                return;
+            }
+            
+            // Player can only sprint if he is already walking and not tip toeing / stationary
+            if (moveAmount >= 0.5f)
+            {
+                player.playerNetworkManager.isSprinting.Value = true;
+            }
+            else
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            if (player.playerNetworkManager.isSprinting.Value)
+            {
+                player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
+            }
+            
+        }
 
         public void AttemptToPerformDodge()
         {
@@ -145,34 +179,28 @@ namespace RS
             player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
         }
 
-        public void HandleSprinting()
+        public void AttemptToPerformJump()
         {
-            // Player cannot sprint when performing an action
-            if (player.isPerformingAction)
-            {
-                player.playerNetworkManager.isSprinting.Value = false;
-            }
-
-            if (player.playerNetworkManager.currentStamina.Value <= 0)
-            {
-                player.playerNetworkManager.isSprinting.Value = false;
+            if(player.isPerformingAction)
                 return;
-            }
             
-            // Player can only sprint if he is already walking and not tip toeing / stationary
-            if (moveAmount >= 0.5f)
-            {
-                player.playerNetworkManager.isSprinting.Value = true;
-            }
-            else
-            {
-                player.playerNetworkManager.isSprinting.Value = false;
-            }
+            if(player.playerNetworkManager.currentStamina.Value <= 0)
+                return;
+            
+            if(player.isJumping)
+                return;
+            
+            if(player.isGrounded)
+                return;
 
-            if (player.playerNetworkManager.isSprinting.Value)
-            {
-                player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
-            }
+            player.playerAnimationManager.PlayTargetActionAnimation("Main_Jump_Start_01", false);
+            player.isJumping = true;
+            
+            player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
+        }
+
+        public void ApplyJumpingVelocity()
+        {
             
         }
     }
