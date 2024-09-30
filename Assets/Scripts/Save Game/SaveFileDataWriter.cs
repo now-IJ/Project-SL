@@ -31,6 +31,7 @@ namespace RS
         /// </summary>
         public void DeleteSaveFile()
         {
+            Debug.Log(Path.Combine(saveDataDirectoryPath, saveFileName));
             File.Delete(Path.Combine(saveDataDirectoryPath, saveFileName));
         }
 

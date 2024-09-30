@@ -248,6 +248,16 @@ namespace RS
             saveFileDataWriter.CreateNewCharacterSaveFile(currentCharacterData);
         }
 
+        public void DeleteGame(CharacterSlot characterSlot)
+        {
+            saveFileDataWriter = new SaveFileDataWriter();
+            saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
+            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(characterSlot);
+
+            saveFileDataWriter.DeleteSaveFile();
+            
+        }
+        
         private void LoadAllCharacterProfiles()
         {
             saveFileDataWriter = new SaveFileDataWriter();
@@ -295,7 +305,7 @@ namespace RS
         
         public IEnumerator LoadWorldScene()
         {
-            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(currentCharacterData.sceneIndex);
 
             player.LoadGameDataToCurrentCharacterData(ref currentCharacterData);
             
