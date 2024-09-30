@@ -190,5 +190,11 @@ namespace RS
                     break;
             }
         }
+
+        public void LoadGameFromCharacterSlot()
+        {
+            WorldSaveGameManager.instance.currentCharacterSlotBeingUsed = characterSlot;
+            WorldSaveGameManager.instance.LoadGame();
+        }
     }
 }

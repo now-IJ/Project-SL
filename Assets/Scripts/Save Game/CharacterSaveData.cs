@@ -7,7 +7,7 @@ namespace RS
     public class CharacterSaveData
     {
         [Header("Character Name")]
-        public string characterName;
+        public string characterName = "Jiwona";
 
         [Header("Time Played")] 
         public float secondsPlayed;

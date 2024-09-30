@@ -49,6 +49,7 @@ namespace RS
             {
                 PlayerCamera.instance.player = this;
                 PlayerInputManager.instance.player = this;
+                WorldSaveGameManager.instance.player = this;
 
                 playerNetworkManager.currentStamina.OnValueChanged +=
                     PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
