@@ -230,7 +230,7 @@ namespace RS
             player.playerNetworkManager.vitality.Value = 15;
             
             SaveGame();
-            StartCoroutine(LoadNewWorld());
+            StartCoroutine(LoadWorldScene());
         }
 
         public void LoadGame()
@@ -315,6 +315,11 @@ namespace RS
         
         public IEnumerator LoadWorldScene()
         {
+            if (currentCharacterData.sceneIndex == 0)
+            {
+                currentCharacterData.sceneIndex = 1;
+            }
+            
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(currentCharacterData.sceneIndex);
 
             player.LoadGameDataToCurrentCharacterData(ref currentCharacterData);
