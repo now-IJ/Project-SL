@@ -268,9 +268,15 @@ MonoBehaviour:
     m_InternalValue: 0
   endurance:
     m_InternalValue: 10
+  vitality:
+    m_InternalValue: 10
   currentStamina:
     m_InternalValue: 0
   maxStamina:
+    m_InternalValue: 0
+  currentHealth:
+    m_InternalValue: 0
+  maxHealth:
     m_InternalValue: 0
   characterName:
     m_InternalValue:

@@ -125,7 +125,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -135,7 +135,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_02;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -145,7 +145,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_03;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -155,7 +155,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_04;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -165,7 +165,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_05;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -175,7 +175,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_06;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -185,7 +185,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_07;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -195,7 +195,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_08;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -205,7 +205,7 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_09;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
@@ -215,12 +215,18 @@ namespace RS
             {
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_10;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
             
             TitleScreenManager.instance.DisplayNoFreeCharacterSlot();
                 
+        }
+
+        public void NewGame()
+        {
+            SaveGame();
+            StartCoroutine(LoadNewWorld());
         }
 
         public void LoadGame()
@@ -306,6 +312,15 @@ namespace RS
         public IEnumerator LoadWorldScene()
         {
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(currentCharacterData.sceneIndex);
+
+            player.LoadGameDataToCurrentCharacterData(ref currentCharacterData);
+            
+            yield return null;
+        }
+        
+        public IEnumerator LoadNewWorld()
+        {
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
 
             player.LoadGameDataToCurrentCharacterData(ref currentCharacterData);
             

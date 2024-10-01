@@ -17,6 +17,20 @@ namespace RS
             character = GetComponent<CharacterManager>();
         }
         
+        protected virtual void Start()
+        {
+            
+        }
+        
+        public int CalculateHealthBasedOnVitalityLevel(int vitality)
+        {
+            float health = 0;
+
+            health = vitality * 15;
+
+            return Mathf.RoundToInt(health);
+        }
+        
         public int CalculateStaminaBasedOnEnduranceLevel(int endurance)
         {
             float stamina = 0;
@@ -61,5 +75,6 @@ namespace RS
                 staminaRegenerationTimer = 0;
             }
         }
+        
     }
 }
