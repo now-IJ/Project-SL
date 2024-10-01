@@ -29,6 +29,7 @@ namespace RS
         [SerializeField] private bool dodgeInput = false;
         [SerializeField] private bool sprintInput = false;
         [SerializeField] private bool jumpInput = false;
+        [SerializeField] private bool RB_Input = false;
 
         private void Awake()
         {
@@ -92,6 +93,7 @@ namespace RS
                 playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
                 playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
                 playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
+                playerControls.PlayerActions.RB.performed += i => RB_Input = true;
             }
             
             playerControls.Enable();
@@ -129,6 +131,7 @@ namespace RS
             HandleDodgeInput();
             HandleSprintInput();
             HandleJumpInput();
+            HandleRBInput();
         }
 
         
@@ -194,6 +197,20 @@ namespace RS
                 jumpInput = false;
                 
                 player.playerLocomotionManager.AttemptToPerformJump();
+            }
+        }
+
+        private void HandleRBInput()
+        {
+            if (RB_Input)
+            {
+                RB_Input = false;
+                
+                player.playerNetworkManager.SetCharacterActionHand(true);
+
+                player.playerCombatManager.PerformWeaponBasedAction(
+                    player.playerInventoryManager.currentRightHandWeapon.oh_rb_Action,
+                    player.playerInventoryManager.currentRightHandWeapon);
             }
         }
     }

@@ -30,6 +30,7 @@ namespace RS
         [Header("Stamina Costs")] 
         public int baseStaminaCost = 20;
         
-        
+        [Header("Actions")]
+        public WeaponItemAction oh_rb_Action;
     }
 }

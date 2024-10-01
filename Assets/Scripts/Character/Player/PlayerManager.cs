@@ -17,6 +17,7 @@ namespace RS
         [HideInInspector] public PlayerStatsManager playerStatsManager;
         [HideInInspector] public PlayerInventoryManager playerInventoryManager;
         [HideInInspector] public PlayerEquipmentManager playerEquipmentManager;
+        [HideInInspector] public PlayerCombatManager playerCombatManager;
         
         protected override void Awake()
         {
@@ -28,6 +29,7 @@ namespace RS
             playerStatsManager = GetComponent<PlayerStatsManager>();
             playerInventoryManager = GetComponent<PlayerInventoryManager>();
             playerEquipmentManager = GetComponent<PlayerEquipmentManager>();
+            playerCombatManager = GetComponent<PlayerCombatManager>();
         }
 
         protected override void Update()
@@ -89,6 +91,9 @@ namespace RS
 
             playerNetworkManager.currentLeftHandedWeaponID.OnValueChanged +=
                 playerNetworkManager.OnCurrenLeftHandWeaponIDChanged;
+
+            playerNetworkManager.currentWeaponBeingUsed.OnValueChanged +=
+                playerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
 
             // Connecting as client
             if (IsOwner && !IsServer)

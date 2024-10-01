@@ -19,13 +19,35 @@ namespace RS
         
         public NetworkVariable<int> currentLeftHandedWeaponID =
             new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
+        public NetworkVariable<int> currentWeaponBeingUsed =
+            new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+        public NetworkVariable<bool> isUsingRightHand = 
+            new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+        public NetworkVariable<bool> isUsingLeftHand = 
+            new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         protected override void Awake()
         {
             base.Awake();
 
             player = GetComponent<PlayerManager>();
+        }
+
+        public void SetCharacterActionHand(bool rightHandedAction)
+        {
+            if (rightHandedAction)
+            {
+                isUsingLeftHand.Value = false;
+                isUsingRightHand.Value = true;
+            }
+            else
+            {
+                isUsingRightHand.Value = false;
+                isUsingLeftHand.Value = true;
+            }
         }
 
         public void SetNewMaxHealthValue(int oldVitality, int newVitality)
@@ -55,6 +77,12 @@ namespace RS
             WeaponItem newWeapon = Instantiate(WorldItemDatabase.instance.GetWeaponByID(newID));
             player.playerInventoryManager.currentLeftHandWeapon = newWeapon;
             player.playerEquipmentManager.LoadLeftWeapon();
+        }
+        
+        public void OnCurrentWeaponBeingUsedIDChange(int oldID, int newID)
+        {
+            WeaponItem newWeapon = Instantiate(WorldItemDatabase.instance.GetWeaponByID(newID));
+            player.playerCombatManager.currentWeaponBeingUsed = newWeapon;
         }
     }
 }
