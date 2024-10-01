@@ -225,6 +225,10 @@ namespace RS
 
         public void NewGame()
         {
+            // DEBUG
+            player.playerNetworkManager.endurance.Value = 10;
+            player.playerNetworkManager.vitality.Value = 15;
+            
             SaveGame();
             StartCoroutine(LoadNewWorld());
         }

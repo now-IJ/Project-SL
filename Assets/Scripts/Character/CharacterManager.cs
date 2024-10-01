@@ -11,7 +11,9 @@ namespace RS
         [HideInInspector] public Animator animator;
         
         [HideInInspector] public CharacterNetworkManager characterNetworkManager;
-
+        
+        [HideInInspector] public  CharacterEffectsManager characterEffectsManager;
+        
         [Header("Flags")] 
         public bool isPerformingAction = false;
         public bool isJumping = false;
@@ -27,6 +29,7 @@ namespace RS
             characterController = GetComponent<CharacterController>();
             animator = GetComponent<Animator>();
             characterNetworkManager = GetComponent<CharacterNetworkManager>();
+            characterEffectsManager = GetComponent<CharacterEffectsManager>();
         }
 
         protected virtual void Update()

@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace RS
+{
+    public class DamageCollider : MonoBehaviour
+    {
+        [Header("Damage")] 
+        public float physicalDamage = 25;
+        public float magicDamage = 0;
+        public float fireDamage = 0;
+        public float lightningDamage = 0;
+        public float holyDamage = 0;
+
+        [Header("Contact Point")] 
+        protected Vector3 contactPoint;
+
+        [Header("Characters Damaged")] 
+        private List<CharacterManager> charactersDamaged = new List<CharacterManager>();
+
+        private void OnTriggerEnter(Collider other)
+        {
+            CharacterManager damagedTarget = other.GetComponent<CharacterManager>();
+
+            if (damagedTarget != null)
+            {
+                contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+                
+                DamageTarget(damagedTarget);
+            }
+        }
+
+        protected virtual void DamageTarget(CharacterManager damagedTarget)
+        {
+            if(charactersDamaged.Contains(damagedTarget))
+                return;
+            
+            charactersDamaged.Add(damagedTarget);
+
+            TakeDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.takeDamageEffect);
+            damageEffect.physicalDamage = physicalDamage;
+            damageEffect.magicDamage = magicDamage;
+            damageEffect.fireDamage = fireDamage;
+            damageEffect.lightningDamage = lightningDamage;
+            damageEffect.holyDamage = holyDamage;
+            
+            damagedTarget.characterEffectsManager.ProcessInstantEffects(damageEffect);
+        }
+    }
+}

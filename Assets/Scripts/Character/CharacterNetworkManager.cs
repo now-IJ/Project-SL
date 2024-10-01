@@ -8,6 +8,10 @@ namespace RS
     public class CharacterNetworkManager : NetworkBehaviour
     {
         private CharacterManager character;
+
+        [Header("Status")] 
+        public NetworkVariable<bool> isDead = new NetworkVariable<bool>
+        (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
         [Header("Position")]
         public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>
@@ -21,39 +25,39 @@ namespace RS
         public float networkRotationSmoothTime = 0.1f;
 
         [Header("Animator")] 
-        public NetworkVariable<float> horizontalMovement =
-            new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<float> horizontalMovement = new NetworkVariable<float>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-        public NetworkVariable<float> verticalMovement =
-            new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<float> verticalMovement = new NetworkVariable<float>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
-        public NetworkVariable<float> moveAmount =
-            new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<float> moveAmount = new NetworkVariable<float>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         [Header("Flags")] 
-        public NetworkVariable<bool> isSprinting = 
-            new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<bool> isSprinting = new NetworkVariable<bool>
+            (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         [Header("Stats")] 
-        public NetworkVariable<int> endurance = 
-            new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<int> endurance = new NetworkVariable<int>
+            (1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
-        public NetworkVariable<int> vitality = 
-            new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<int> vitality = new NetworkVariable<int>
+            (1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
         [Header("Resources")]
-        public NetworkVariable<float> currentStamina = 
-            new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<float> currentStamina = new NetworkVariable<float>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
-        public NetworkVariable<int> maxStamina = 
-            new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<int> maxStamina = new NetworkVariable<int>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
          
         
-        public NetworkVariable<float> currentHealth = 
-            new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<float> currentHealth = new NetworkVariable<float>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
-        public NetworkVariable<int> maxHealth = 
-            new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<int> maxHealth = new NetworkVariable<int>
+            (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
         
         

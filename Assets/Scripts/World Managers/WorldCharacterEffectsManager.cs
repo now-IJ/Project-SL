@@ -8,6 +8,9 @@ namespace RS
     {
         public static WorldCharacterEffectsManager instance;
 
+        [Header("Damage")]
+        public TakeDamageEffect takeDamageEffect;
+        
         [SerializeField] private List<InstantCharacterEffect> instantEffects;
         
         private void Awake()
