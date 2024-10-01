@@ -50,6 +50,11 @@ namespace RS
             SceneManager.activeSceneChanged += OnSceneChanged;
             
             instance.enabled = false;
+
+            if (playerControls != null)
+            {
+                playerControls.Disable();
+            }
         }
 
         private void OnSceneChanged(Scene oldScene, Scene newScene)
@@ -57,10 +62,20 @@ namespace RS
             if (newScene.buildIndex == WorldSaveGameManager.instance.GetWorldSceneIndex())
             {
                 instance.enabled = true;
+                
+                if (playerControls != null)
+                {
+                    playerControls.Enable();
+                }
             }
             else
-            {
+            {   
                 instance.enabled = false;
+                
+                if (playerControls != null)
+                {
+                    playerControls.Disable();
+                }
             }
         }
         

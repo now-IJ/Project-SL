@@ -38,7 +38,7 @@ namespace RS
             }
             else
             {
-                if (!character.isJumping && !fallingVelocityHasBeenSet)
+                if (!character.characterNetworkManager.isJumping.Value && !fallingVelocityHasBeenSet)
                 {
                     fallingVelocityHasBeenSet = true;
                     yVelocity.y = fallStartVelocity;

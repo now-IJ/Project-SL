@@ -79,6 +79,7 @@ namespace RS
                     playerStatsManager.ResetStaminaRegenerationTimer;
             }
 
+            // Stats
             playerNetworkManager.currentHealth.OnValueChanged += playerNetworkManager.CheckHP;
 
             
@@ -88,6 +89,12 @@ namespace RS
 
             playerNetworkManager.currentLeftHandedWeaponID.OnValueChanged +=
                 playerNetworkManager.OnCurrenLeftHandWeaponIDChanged;
+
+            // Connecting as client
+            if (IsOwner && !IsServer)
+            {
+                LoadGameDataToCurrentCharacterData(ref WorldSaveGameManager.instance.currentCharacterData);
+            }
         }
 
         public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)

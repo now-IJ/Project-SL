@@ -106,7 +106,7 @@ namespace RS
 
         private void HandleJumpingMovement()
         {
-            if (player.isJumping)
+            if (player.playerNetworkManager.isJumping.Value)
             {
                 player.characterController.Move(jumpDirection * jumpForwardSpeed * Time.deltaTime);
             }
@@ -217,14 +217,14 @@ namespace RS
             if(player.playerNetworkManager.currentStamina.Value <= 0)
                 return;
             
-            if(player.isJumping)
+            if(player.playerNetworkManager.isJumping.Value)
                 return;
             
             if(!player.isGrounded)
                 return;
 
             player.playerAnimationManager.PlayTargetActionAnimation("Main_Jump_Start_01", false);
-            player.isJumping = true;
+            player.playerNetworkManager.isJumping.Value = true;
             
             player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
             

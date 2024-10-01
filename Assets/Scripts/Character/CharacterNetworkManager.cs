@@ -37,7 +37,11 @@ namespace RS
         [Header("Flags")] 
         public NetworkVariable<bool> isSprinting = new NetworkVariable<bool>
             (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
+        public NetworkVariable<bool> isJumping = new NetworkVariable<bool>
+            (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+        
         [Header("Stats")] 
         public NetworkVariable<int> endurance = new NetworkVariable<int>
             (1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
