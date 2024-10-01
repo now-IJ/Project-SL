@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -32,6 +33,11 @@ namespace RS
             characterNetworkManager = GetComponent<CharacterNetworkManager>();
             characterEffectsManager = GetComponent<CharacterEffectsManager>();
             characterAnimationManager = GetComponent<CharacterAnimationManager>();
+        }
+
+        protected virtual void Start()
+        {
+            IgnoreOwnColliders();
         }
 
         protected virtual void Update()
@@ -91,6 +97,29 @@ namespace RS
         public virtual void ReviveCharacter()
         {
             
+        }
+
+        protected virtual void IgnoreOwnColliders()
+        {
+            Collider characterControllerCollider = GetComponent<Collider>();
+            Collider[] damageableCharacterColliders = GetComponentsInChildren<Collider>();
+
+            List<Collider> ignoreColliders = new List<Collider>();
+
+            foreach (Collider collider in damageableCharacterColliders)
+            {
+                ignoreColliders.Add(collider);               
+            }
+            
+            ignoreColliders.Add(characterControllerCollider);
+
+            foreach (Collider collider in ignoreColliders)
+            {
+                foreach (Collider otherCollider in ignoreColliders)
+                {
+                    Physics.IgnoreCollision(collider, otherCollider, true);
+                }
+            }
         }
         
     }

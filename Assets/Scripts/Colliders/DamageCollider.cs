@@ -24,7 +24,7 @@ namespace RS
 
         private void OnTriggerEnter(Collider other)
         {
-            CharacterManager damagedTarget = other.GetComponent<CharacterManager>();
+            CharacterManager damagedTarget = other.GetComponentInParent<CharacterManager>();
 
             if (damagedTarget != null)
             {

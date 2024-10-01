@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace RS
 {
@@ -6,6 +8,25 @@ namespace RS
     {
         [SerializeField] private UI_StatBar healthBar;
         [SerializeField] private UI_StatBar staminaBar;
+
+        private void Start()
+        {
+            SceneManager.activeSceneChanged += OnSceneChanged;
+            
+            this.gameObject.SetActive(false);
+        }
+        
+        private void OnSceneChanged(Scene oldScene, Scene newScene)
+        {
+            if (newScene.buildIndex == WorldSaveGameManager.instance.GetWorldSceneIndex())
+            {
+                this.gameObject.SetActive(true);
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+            }
+        }
 
         public void RefreshHUD()
         {
