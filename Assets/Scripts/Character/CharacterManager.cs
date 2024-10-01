@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,12 +8,12 @@ namespace RS
 {
     public class CharacterManager : NetworkBehaviour
     {
-        public CharacterController characterController;
+        [HideInInspector] public CharacterController characterController;
         [HideInInspector] public Animator animator;
         
         [HideInInspector] public CharacterNetworkManager characterNetworkManager;
-        
-        [HideInInspector] public  CharacterEffectsManager characterEffectsManager;
+        [HideInInspector] public CharacterEffectsManager characterEffectsManager;
+        [HideInInspector] public CharacterAnimationManager characterAnimationManager;
         
         [Header("Flags")] 
         public bool isPerformingAction = false;
@@ -30,6 +31,7 @@ namespace RS
             animator = GetComponent<Animator>();
             characterNetworkManager = GetComponent<CharacterNetworkManager>();
             characterEffectsManager = GetComponent<CharacterEffectsManager>();
+            characterAnimationManager = GetComponent<CharacterAnimationManager>();
         }
 
         protected virtual void Update()
@@ -59,6 +61,34 @@ namespace RS
         }
 
         protected virtual void LateUpdate()
+        {
+            
+        }
+
+        public virtual IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
+        {
+            if (IsOwner)
+            {
+                characterNetworkManager.currentHealth.Value = 0;
+                characterNetworkManager.isDead.Value = true;
+                
+                // Reset Flags
+
+
+                if (!manuallySelectDeathAnimation)
+                {
+                    characterAnimationManager.PlayTargetActionAnimation("Dead_01", true);
+                }
+            }
+            
+            // Play Death SFX
+
+            yield return new WaitForSeconds(5);
+            
+            // Award player with runes
+        }
+
+        public virtual void ReviveCharacter()
         {
             
         }

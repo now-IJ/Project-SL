@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,6 +6,8 @@ namespace RS
 {
     public class PlayerManager : CharacterManager
     {
+        [Header("Debug Menu")] 
+        [SerializeField] private bool respawnCharacter = false;
         [HideInInspector] public PlayerAnimationManager playerAnimationManager;
         [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
         [HideInInspector] public PlayerNetworkManager playerNetworkManager;
@@ -30,6 +33,8 @@ namespace RS
             playerLocomotionManager.HandleAllMovement();
             
             playerStatsManager.RegenerateStamina();
+            
+            DebugMenu();
         }
 
         protected override void LateUpdate()
@@ -66,6 +71,32 @@ namespace RS
                 playerNetworkManager.currentStamina.OnValueChanged +=
                     playerStatsManager.ResetStaminaRegenerationTimer;
             }
+
+            playerNetworkManager.currentHealth.OnValueChanged += playerNetworkManager.CheckHP;
+        }
+
+        public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
+        {
+            if (IsOwner)
+            {
+                PlayerUIManager.instance.playerUIPopUpManager.SendYouDiedPopUp();
+            }
+            
+            return base.ProcessDeathEvent(manuallySelectDeathAnimation);
+        }
+
+        public override void ReviveCharacter()
+        {
+            base.ReviveCharacter();
+
+            if (IsOwner)
+            {
+                playerNetworkManager.currentHealth.Value = playerNetworkManager.maxHealth.Value;
+                playerNetworkManager.currentStamina.Value = playerNetworkManager.maxStamina.Value;
+                
+                // Play rebirth effect
+                playerAnimationManager.PlayTargetActionAnimation("Empty", false);
+            }
         }
 
         public void SaveGameDataToCurrentCharacterData(ref CharacterSaveData currentCharacterData)
@@ -97,6 +128,15 @@ namespace RS
             playerNetworkManager.currentHealth.Value = currentCharacterData.currentHealth;
             playerNetworkManager.currentStamina.Value = currentCharacterData.currentStamina;
             PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
+        }
+
+        private void DebugMenu()
+        {
+            if (respawnCharacter)
+            {
+                respawnCharacter = false;
+                ReviveCharacter();
+            }
         }
     }
 }
