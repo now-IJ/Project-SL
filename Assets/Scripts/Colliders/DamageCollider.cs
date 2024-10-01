@@ -6,6 +6,9 @@ namespace RS
 {
     public class DamageCollider : MonoBehaviour
     {
+        [Header("Collider")] 
+        protected Collider damageCollider;
+        
         [Header("Damage")] 
         public float physicalDamage = 25;
         public float magicDamage = 0;
@@ -46,6 +49,17 @@ namespace RS
             damageEffect.holyDamage = holyDamage;
             
             damagedTarget.characterEffectsManager.ProcessInstantEffects(damageEffect);
+        }
+
+        public virtual void EnableDamageCollision()
+        {
+            damageCollider.enabled = true;
+        }
+
+        public virtual void DisableDamageCollision()
+        {
+            damageCollider.enabled = false;
+            charactersDamaged.Clear();
         }
     }
 }
