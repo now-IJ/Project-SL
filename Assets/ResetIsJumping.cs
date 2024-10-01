@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace RS
 {
-    public class ResetActionFlags : StateMachineBehaviour
+    public class ResetIsJumping : StateMachineBehaviour
     {
         private CharacterManager character;
         
@@ -14,10 +14,6 @@ namespace RS
                 character = animator.GetComponent<CharacterManager>();
             }
 
-            character.isPerformingAction = false;
-            character.applyRootMotion = false;
-            character.canMove = true;
-            character.canRotate = true;
             character.isJumping = false;
         }
 

@@ -8,7 +8,7 @@ namespace RS
         private CharacterManager character;
 
         [Header("Ground Check & Jumping")] 
-        [SerializeField] private float gravityForce = -5.55f;
+        [SerializeField] protected float gravityForce = -5.55f;
         [SerializeField] private float groundCheckRadius = 1;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private protected Vector3 yVelocity; // The force at which the player is pulled up or down Jumping/Falling

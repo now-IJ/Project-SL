@@ -113,6 +113,7 @@ namespace RS
             HandleCameraMovementInput();
             HandleDodgeInput();
             HandleSprintInput();
+            HandleJumpInput();
         }
 
         
@@ -173,7 +174,7 @@ namespace RS
 
         private void HandleJumpInput()
         {
-            if (jumpInput = true)
+            if (jumpInput)
             {
                 jumpInput = false;
                 

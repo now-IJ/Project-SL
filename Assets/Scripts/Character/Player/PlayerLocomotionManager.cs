@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace RS
 {
@@ -24,7 +25,11 @@ namespace RS
         private Vector3 rollDirection;
         
         [Header("Jump")]
+        [SerializeField] private float jumpForwardSpeed = 5;
+        [SerializeField] private float freeFallSpeed = 2;
         [SerializeField] private float jumpStaminaCost = 25;
+        [SerializeField] private float jumpHeight = 4;
+        [SerializeField] private Vector3 jumpDirection;
         
         protected override void Awake()
         {
@@ -56,6 +61,8 @@ namespace RS
         public void HandleAllMovement()
         {
             HandleGroundedMovement();
+            HandleJumpingMovement();
+            HandleFreeFallMovement();
             HandleRotation();
         }
 
@@ -94,6 +101,29 @@ namespace RS
                     // Walking Speed
                     player.characterController.Move(movementDirection * (walkingSpeed * Time.deltaTime));
                 }
+            }
+        }
+
+        private void HandleJumpingMovement()
+        {
+            if (player.isJumping)
+            {
+                player.characterController.Move(jumpDirection * jumpForwardSpeed * Time.deltaTime);
+            }
+        }
+
+        private void HandleFreeFallMovement()
+        {
+            if (!player.isGrounded)
+            {
+                Vector3 freeFallDirection;
+                
+                freeFallDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.verticalInput;
+                freeFallDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontalInput;
+                freeFallDirection.y = 0;
+
+                player.characterController.Move(freeFallDirection * freeFallSpeed * Time.deltaTime);
+
             }
         }
 
@@ -190,18 +220,39 @@ namespace RS
             if(player.isJumping)
                 return;
             
-            if(player.isGrounded)
+            if(!player.isGrounded)
                 return;
 
             player.playerAnimationManager.PlayTargetActionAnimation("Main_Jump_Start_01", false);
             player.isJumping = true;
             
             player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
+            
+            jumpDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.verticalInput;
+            jumpDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontalInput;
+
+            jumpDirection.y = 0;
+
+            if (jumpDirection != Vector3.zero)
+            {
+                if (player.playerNetworkManager.isSprinting.Value)
+                {
+                    jumpDirection *= 1;
+                }
+                else if (PlayerInputManager.instance.moveAmount > 0.5f)
+                {
+                    jumpDirection *= 0.5f;
+                }
+                else if (PlayerInputManager.instance.moveAmount <= 0.5f)
+                {
+                    jumpDirection *= 0.25f;
+                }
+            }
         }
 
         public void ApplyJumpingVelocity()
         {
-            
+            yVelocity.y = Mathf.Sqrt(jumpHeight * -2 * gravityForce);
         }
     }
 }
