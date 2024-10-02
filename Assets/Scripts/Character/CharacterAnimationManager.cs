@@ -44,5 +44,18 @@ namespace RS
             character.characterNetworkManager.NotifyServerOfActionAnimationServerRPC
             (NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
         }
+        
+        public virtual void PlayTargetAttackActionAnimation(string targetAnimation, bool isPerformingAction,
+            bool applyRootMotion = true, bool canRotate = false, bool canMove = false)
+        {
+            character.animator.CrossFade(targetAnimation, 0.2f);
+            character.isPerformingAction = isPerformingAction;
+            character.applyRootMotion = applyRootMotion;
+            character.canRotate = canRotate;
+            character.canMove = canMove;
+
+            character.characterNetworkManager.NotifyServerOfAttackActionAnimationServerRPC
+                (NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
+        }
     }
 }

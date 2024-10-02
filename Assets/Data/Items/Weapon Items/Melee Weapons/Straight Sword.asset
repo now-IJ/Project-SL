@@ -28,4 +28,4 @@ MonoBehaviour:
   holyDamage: 0
   poiseDamage: 25
   baseStaminaCost: 20
-  oh_rb_Action: {fileID: 11400000, guid: 1fb4cad809bf6854093d1a060aacc718, type: 2}
+  oh_rb_Action: {fileID: 11400000, guid: 5a590e76f7708c5458baffd48668bb56, type: 2}

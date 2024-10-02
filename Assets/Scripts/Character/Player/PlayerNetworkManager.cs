@@ -84,5 +84,38 @@ namespace RS
             WeaponItem newWeapon = Instantiate(WorldItemDatabase.instance.GetWeaponByID(newID));
             player.playerCombatManager.currentWeaponBeingUsed = newWeapon;
         }
+        
+        // Item actions
+        [ServerRpc]
+        public void NotifyServerOfWeaponActionServerRPC(ulong clientID, int actionID, int weaponID)
+        {
+            if (IsServer)
+            {
+                NotifyServerOfWeaponActionClientRPC(clientID, actionID, weaponID);
+            }
+        }
+
+        [ClientRpc]
+        private void NotifyServerOfWeaponActionClientRPC(ulong clientID, int actionID, int weaponID)
+        {
+            if (clientID != NetworkManager.Singleton.LocalClientId)
+            {
+                PerformWeaponBasedAction(actionID, weaponID);
+            }
+        }
+
+        private void PerformWeaponBasedAction(int actionID, int weaponID)
+        {
+            WeaponItemAction weaponAction = WorldActionManager.instance.GetWeaponItemActionByID(actionID);
+
+            if (weaponAction != null)
+            {
+                weaponAction.AttemptToPerformAction(player, WorldItemDatabase.instance.GetWeaponByID(weaponID));
+            }
+            else
+            {
+                Debug.LogError("ACTION IS NULL");
+            }
+        }
     }
 }

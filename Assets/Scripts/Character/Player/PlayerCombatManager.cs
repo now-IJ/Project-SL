@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace RS
@@ -5,7 +6,7 @@ namespace RS
     public class PlayerCombatManager : CharacterCombatManager
     {
         private PlayerManager player;
-        
+
         public WeaponItem currentWeaponBeingUsed;
 
         protected override void Awake()
@@ -17,7 +18,12 @@ namespace RS
 
         public void PerformWeaponBasedAction(WeaponItemAction weaponAction, WeaponItem weaponPerformingAction)
         {
-            weaponAction.AttemptToPerformAction(player, weaponPerformingAction);
+            if (player.IsOwner)
+            {
+                weaponAction.AttemptToPerformAction(player, weaponPerformingAction);
+                
+                player.playerNetworkManager.NotifyServerOfWeaponActionServerRPC(NetworkManager.Singleton.LocalClientId, weaponAction.actionID, weaponPerformingAction.itemID);
+            }
         }
     }
 }

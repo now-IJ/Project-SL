@@ -85,6 +85,8 @@ namespace RS
             }
         }
 
+        // Animation
+        
         [ServerRpc]
         public void NotifyServerOfActionAnimationServerRPC(ulong ClientID, string animationID, bool applyRootMotion)
         {
@@ -104,6 +106,32 @@ namespace RS
         }
 
         private void PerformActionAnimationFromServer(string animationID, bool applyRootMotion)
+        {
+            character.applyRootMotion = applyRootMotion;
+            character.animator.CrossFade(animationID, 0.2f);
+        }
+        
+        // Attack Animation
+        
+        [ServerRpc]
+        public void NotifyServerOfAttackActionAnimationServerRPC(ulong ClientID, string animationID, bool applyRootMotion)
+        {
+            if (IsServer)
+            {
+                PlayAttackActionAnimationOnAllClientsClientRPC(ClientID, animationID, applyRootMotion);
+            }
+        }
+
+        [ClientRpc]
+        public void PlayAttackActionAnimationOnAllClientsClientRPC(ulong ClientID, string animationID, bool applyRootMotion)
+        {
+            if (ClientID != NetworkManager.Singleton.LocalClientId)
+            {
+                PerformAttackActionAnimationFromServer(animationID, applyRootMotion);
+            }
+        }
+
+        private void PerformAttackActionAnimationFromServer(string animationID, bool applyRootMotion)
         {
             character.applyRootMotion = applyRootMotion;
             character.animator.CrossFade(animationID, 0.2f);
