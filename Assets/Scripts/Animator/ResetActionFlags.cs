@@ -19,6 +19,7 @@ namespace RS
             character.canMove = true;
             character.canRotate = true;
             character.characterLocomotionManager.isRolling = false;
+            character.characterAnimationManager.DisableCanDoCombo();
             
             if (character.IsOwner)
             {

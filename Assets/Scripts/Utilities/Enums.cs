@@ -33,7 +33,10 @@ namespace RS
         LightAttack01,
         LightAttack02,
         HeavyAttack01,
+        HeavyAttack02,
+        HeavyAttack03,
         ChargedAttack01,
         ChargedAttack02,
+        ChargedAttack03,
     }
 }

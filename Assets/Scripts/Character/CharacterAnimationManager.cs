@@ -167,6 +167,7 @@ namespace RS
             bool canMove = false)
         {
             character.characterCombatManager.currentAttackType = attackType;
+            character.characterCombatManager.lastAttackAnimationPerformed = targetAnimation;
             character.animator.CrossFade(targetAnimation, 0.2f);
             character.isPerformingAction = isPerformingAction;
             character.applyRootMotion = applyRootMotion;
@@ -175,6 +176,16 @@ namespace RS
 
             character.characterNetworkManager.NotifyServerOfAttackActionAnimationServerRPC
                 (NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
+        }
+        
+        public virtual void EnableCanDoCombo()
+        {
+            
+        }
+        
+        public virtual void DisableCanDoCombo()
+        {
+            
         }
     }
 }

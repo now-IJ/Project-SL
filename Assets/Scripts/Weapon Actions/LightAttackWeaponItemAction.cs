@@ -7,6 +7,7 @@ namespace RS
     public class LightAttackWeaponItemAction : WeaponItemAction
     {
         [SerializeField] private string light_Attack_01 = "Main_Light_Attack_01";
+        [SerializeField] private string light_Attack_02 = "Main_Light_Attack_02";
         
         public override void AttemptToPerformAction(PlayerManager playerPerformingAction, WeaponItem weaponPerformingAction)
         {
@@ -26,15 +27,27 @@ namespace RS
 
         private void PerformingLightAttack(PlayerManager playerPerformingAction, WeaponItem weaponPerformingAction)
         {
-            if (playerPerformingAction.playerNetworkManager.isUsingRightHand.Value)
+            // If player is attacking and can combo perform the combo
+            if (playerPerformingAction.playerCombatManager.canComboWithMainHandWeapon && playerPerformingAction.isPerformingAction)
+            {
+                playerPerformingAction.playerCombatManager.canComboWithMainHandWeapon = false;
+                
+                // Perform an attack based on previous attack
+                if (playerPerformingAction.playerCombatManager.lastAttackAnimationPerformed == light_Attack_01)
+                {
+                    playerPerformingAction.playerAnimationManager.PlayTargetAttackActionAnimation(AttackType.LightAttack02, light_Attack_02, true);
+                }
+                else
+                {
+                    playerPerformingAction.playerAnimationManager.PlayTargetAttackActionAnimation(AttackType.LightAttack01, light_Attack_01, true);
+                }
+            }
+            // just perform regular attack
+            else if(!playerPerformingAction.isPerformingAction)
             {
                 playerPerformingAction.playerAnimationManager.PlayTargetAttackActionAnimation(AttackType.LightAttack01, light_Attack_01, true);
             }
-
-            if (playerPerformingAction.playerNetworkManager.isUsingLeftHand.Value)
-            {
-                
-            }
+            
         }
     }
 }
