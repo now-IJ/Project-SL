@@ -340,14 +340,12 @@ MonoBehaviour:
   characterAnimationManager: {fileID: 0}
   characterCombatManager: {fileID: 0}
   characterSoundFXManager: {fileID: 0}
+  characterLocomotionManager: {fileID: 0}
   isPerformingAction: 0
   isGrounded: 1
   applyRootMotion: 0
   canRotate: 1
   canMove: 1
-  respawnCharacter: 0
-  switchRightWeapon: 0
-  switchLeftWeapon: 0
   playerAnimationManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
   playerNetworkManager: {fileID: 0}
@@ -383,11 +381,15 @@ MonoBehaviour:
     m_InternalValue: 0
   moveAmount:
     m_InternalValue: 0
+  currentTargetNetworkObjectID:
+    m_InternalValue: 0
   isLockedOn:
     m_InternalValue: 0
   isSprinting:
     m_InternalValue: 0
   isJumping:
+    m_InternalValue: 0
+  isChargingAttack:
     m_InternalValue: 0
   endurance:
     m_InternalValue: 10
@@ -500,6 +502,7 @@ MonoBehaviour:
   yVelocity: {x: 0, y: 0, z: 0}
   groundedYVelocity: -20
   fallStartVelocity: -5
+  isRolling: 0
   verticalMovement: 0
   horizontalMovement: 0
   moveAmount: 0
@@ -596,12 +599,12 @@ MonoBehaviour:
   currentLeftHandWeapon: {fileID: 11400000, guid: 73862a8f5a0ecca439967cf856fba7e4, type: 2}
   weaponsInRightHandSlots:
   - {fileID: 11400000, guid: 73862a8f5a0ecca439967cf856fba7e4, type: 2}
-  - {fileID: 11400000, guid: 73862a8f5a0ecca439967cf856fba7e4, type: 2}
+  - {fileID: 11400000, guid: d834990e3cdf4224480f4922d12389dd, type: 2}
   - {fileID: 11400000, guid: 73862a8f5a0ecca439967cf856fba7e4, type: 2}
   rightHandWeaponIndex: 0
   weaponsInLeftHandSlots:
   - {fileID: 11400000, guid: 73862a8f5a0ecca439967cf856fba7e4, type: 2}
-  - {fileID: 11400000, guid: 73862a8f5a0ecca439967cf856fba7e4, type: 2}
+  - {fileID: 11400000, guid: 8a397c84ec982f648944553a7a20a739, type: 2}
   - {fileID: 11400000, guid: 73862a8f5a0ecca439967cf856fba7e4, type: 2}
   leftHandWeaponIndex: 0
 --- !u!114 &5743926744985070639
@@ -634,6 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a9feb1b9e1565e40bfa723b2e4fe0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   currentTarget: {fileID: 0}
   currentAttackType: 0
   lockOnTargetTransform: {fileID: 8657883747781547986}

@@ -7,11 +7,6 @@ namespace RS
 {
     public class PlayerManager : CharacterManager
     {
-        [Header("Debug Menu")] 
-        [SerializeField] private bool respawnCharacter = false;
-        [SerializeField] private bool switchRightWeapon = false;
-        [SerializeField] private bool switchLeftWeapon = false;
-        
         [HideInInspector] public PlayerAnimationManager playerAnimationManager;
         [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
         [HideInInspector] public PlayerNetworkManager playerNetworkManager;
@@ -43,8 +38,6 @@ namespace RS
             playerLocomotionManager.HandleAllMovement();
             
             playerStatsManager.RegenerateStamina();
-            
-            DebugMenu();
         }
 
         protected override void LateUpdate()
@@ -242,26 +235,6 @@ namespace RS
             
             // Lock On
             playerNetworkManager.OnCurrentLockOnTargetIDChange(0, playerNetworkManager.currentTargetNetworkObjectID.Value);
-        }
-        
-        private void DebugMenu()
-        {
-            if (respawnCharacter)
-            {
-                respawnCharacter = false;
-                ReviveCharacter();
-            }
-
-            if (switchRightWeapon)
-            {
-                switchRightWeapon = false;
-                playerEquipmentManager.SwitchRightWeapon();
-            }
-            if (switchLeftWeapon)
-            {
-                switchLeftWeapon = false;
-                playerEquipmentManager.SwitchLeftWeapon();
-            }
         }
     }
 }
