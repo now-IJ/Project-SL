@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Netcode;
 
 namespace RS
 {
@@ -60,6 +61,8 @@ namespace RS
         {
             base.OnNetworkSpawn();
 
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
+            
             if (IsOwner)
             {
                 PlayerCamera.instance.player = this;
@@ -99,6 +102,22 @@ namespace RS
             if (IsOwner && !IsServer)
             {
                 LoadGameDataToCurrentCharacterData(ref WorldSaveGameManager.instance.currentCharacterData);
+            }
+        }
+
+        private void OnClientConnectedCallback(ulong clientID)
+        {
+            WorldGameSessionManager.instance.AddPlayerToActivePlayerList(this);
+            
+            if (!IsServer && IsOwner)
+            {
+                foreach (PlayerManager player in WorldGameSessionManager.instance.players)
+                {
+                    if (player != this)
+                    {
+                        player.LoadOtherPlayerCharacterWhenJoiningSever();
+                    }
+                }   
             }
         }
 
@@ -157,6 +176,15 @@ namespace RS
             PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
         }
 
+        public void LoadOtherPlayerCharacterWhenJoiningSever()
+        {
+            // Sync Weapons
+            playerNetworkManager.OnCurrentWeaponBeingUsedIDChange(0, playerNetworkManager.currentRightHandedWeaponID.Value);
+            playerNetworkManager.OnCurrentWeaponBeingUsedIDChange(0, playerNetworkManager.currentLeftHandedWeaponID.Value);
+            
+            // Sync Armor
+        }
+        
         private void DebugMenu()
         {
             if (respawnCharacter)

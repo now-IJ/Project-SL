@@ -13,6 +13,9 @@ namespace RS
         
         [SerializeField] private List<InstantCharacterEffect> instantEffects;
         
+        [Header("VFX")] 
+        public GameObject bloodSplatterVFX;
+        
         private void Awake()
         {
             if (instance == null)

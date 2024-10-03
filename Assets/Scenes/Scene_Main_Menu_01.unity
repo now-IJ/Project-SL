@@ -3094,6 +3094,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1405813390 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4120778051655038870, guid: fc223b53923982e408153a6ec1150ed0, type: 3}
+  m_PrefabInstance: {fileID: 6886488368676286478}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1405813394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405813390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42b3a728c3051984bbb4159d42fcc5ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
 --- !u!1 &1515609731
 GameObject:
   m_ObjectHideFlags: 0
@@ -5334,6 +5352,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 646880185139224679, guid: 6204189fb7d3f0e468c36e1c30edaecd, type: 3}
+      propertyPath: physicalDamageSFX.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 646880185139224679, guid: 6204189fb7d3f0e468c36e1c30edaecd, type: 3}
+      propertyPath: 'physicalDamageSFX.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 7cbd6cd765888ff418d01d98bd1ce9c2, type: 3}
+    - target: {fileID: 646880185139224679, guid: 6204189fb7d3f0e468c36e1c30edaecd, type: 3}
+      propertyPath: 'physicalDamageSFX.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 3df9bbbc130ccb344af5f3fc793a630f, type: 3}
     - target: {fileID: 2772814804180221113, guid: 6204189fb7d3f0e468c36e1c30edaecd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5544,6 +5574,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7621787879289078588, guid: d55069f3722b84c4094f8aeabf2a89d5, type: 3}
+      propertyPath: bloodSplatterVFX
+      value: 
+      objectReference: {fileID: 3548588485384254792, guid: 2f9e7dc163581394da1e00b561eed65d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5746,7 +5780,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4120778051655038870, guid: fc223b53923982e408153a6ec1150ed0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1405813394}
   m_SourcePrefab: {fileID: 100100000, guid: fc223b53923982e408153a6ec1150ed0, type: 3}
 --- !u!222 &7187795203941120320
 CanvasRenderer:

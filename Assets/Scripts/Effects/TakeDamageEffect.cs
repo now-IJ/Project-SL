@@ -51,7 +51,9 @@ namespace RS
             // play damage animation
             // check for build ups (poison, bleed,etc)
             // play damage sfx
+            PlayDamageSFX(character);
             // play damage vfx
+            PlayDamageVFX(character);
             
             // AI behaviour
         }
@@ -83,5 +85,24 @@ namespace RS
             
             // calculate poise damage
         }
+
+        private void PlayDamageVFX(CharacterManager character)
+        {
+            // Play damage effect based on element
+            // i.e. Fire effect / lighting effect
+            
+            character.characterEffectsManager.PlayBloodSplatterVFX(contactPoint);
+        }
+
+        private void PlayDamageSFX(CharacterManager character)
+        {
+            AudioClip physicalDamageSFX = WorldSoundFXManager.instance.ChooseRandomSFXFromArray(WorldSoundFXManager.instance.physicalDamageSFX);
+            
+            character.characterSoundFXManager.PlaySoundFX(physicalDamageSFX);
+
+            // If effect damage is greater than 0, play effect sound
+            // i.e. Fire, lighting
+        }
+        
     }
 }
