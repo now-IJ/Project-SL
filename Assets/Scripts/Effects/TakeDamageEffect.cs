@@ -110,6 +110,9 @@ namespace RS
             if(!character.IsOwner)
                 return;
             
+            if(character.characterNetworkManager.isDead.Value)
+                return;
+            
             poiseIsBroken = true;
             
             if (angleHitFrom >= 145 && angleHitFrom <= 180)

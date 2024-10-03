@@ -161,7 +161,8 @@ namespace RS
             if (lockOn_Input && player.playerNetworkManager.isLockedOn.Value)
             {
                 lockOn_Input = false;
-                
+                PlayerCamera.instance.ClearLockOnTargets();
+                player.playerNetworkManager.isLockedOn.Value = false;
                 // Disable Lock on
                 return;
             }    
@@ -171,6 +172,13 @@ namespace RS
 
                 // Attempt to Lock On
                 PlayerCamera.instance.HandleLocatingLockedOnTargets();
+
+                if (PlayerCamera.instance.nearestLockOnTarget != null)
+                {
+                    // Set the target as current target
+                    player.playerCombatManager.SetTarget(PlayerCamera.instance.nearestLockOnTarget);
+                    player.playerNetworkManager.isLockedOn.Value = true;
+                }
             }    
         }
         

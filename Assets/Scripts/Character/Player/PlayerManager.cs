@@ -87,6 +87,10 @@ namespace RS
             // Stats
             playerNetworkManager.currentHealth.OnValueChanged += playerNetworkManager.CheckHP;
 
+            // Lock On
+            playerNetworkManager.isLockedOn.OnValueChanged += playerNetworkManager.OnCurrentIsLockedOnChanged;
+            playerNetworkManager.currentTargetNetworkObjectID.OnValueChanged +=
+                playerNetworkManager.OnCurrentLockOnTargetIDChange;
             
             // Equipment
             playerNetworkManager.currentRightHandedWeaponID.OnValueChanged +=
@@ -134,6 +138,8 @@ namespace RS
         public override void ReviveCharacter()
         {
             base.ReviveCharacter();
+
+            playerNetworkManager.isDead.Value = false;
 
             if (IsOwner)
             {
@@ -183,6 +189,9 @@ namespace RS
             playerNetworkManager.OnCurrentWeaponBeingUsedIDChange(0, playerNetworkManager.currentLeftHandedWeaponID.Value);
             
             // Sync Armor
+            
+            // Lock On
+            playerNetworkManager.OnCurrentLockOnTargetIDChange(0, playerNetworkManager.currentTargetNetworkObjectID.Value);
         }
         
         private void DebugMenu()

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -34,6 +35,10 @@ namespace RS
         public NetworkVariable<float> moveAmount = new NetworkVariable<float>
             (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+        [Header("Target")] 
+        public NetworkVariable<ulong> currentTargetNetworkObjectID =
+            new NetworkVariable<ulong>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
         [Header("Flags")] 
         public NetworkVariable<bool> isLockedOn = new NetworkVariable<bool>
             (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -66,7 +71,6 @@ namespace RS
             (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
         
-        
         protected virtual void Awake()
         {
             character = GetComponent<CharacterManager>();
@@ -88,6 +92,22 @@ namespace RS
             }
         }
 
+        public void OnCurrentLockOnTargetIDChange(ulong oldID, ulong newID)
+        {
+            if (!IsOwner)
+            {
+                character.characterCombatManager.currentTarget = 
+                    NetworkManager.Singleton.SpawnManager.SpawnedObjects[newID].gameObject.GetComponent<CharacterManager>();
+            }
+        }
+
+        public void OnCurrentIsLockedOnChanged(bool old, bool isLockedOn)
+        {
+            if (!isLockedOn)
+            {
+                character.characterCombatManager.currentTarget = null;
+            }
+        }
         
         // Animation
         [ServerRpc]

@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RS
@@ -36,6 +37,10 @@ namespace RS
         [SerializeField] private float minimumViewAbleAngle = -50;
         [SerializeField] private float maximumViewAbleAngle = 50;
         [SerializeField] private float maximumLockOnDistance = 20;
+        [SerializeField] private float lockOnTargetFollowSpeed = 0.2f;
+        private List<CharacterManager> availableTargets = new List<CharacterManager>();
+        public CharacterManager nearestLockOnTarget;
+        
         
         private void Awake()
         {
@@ -74,23 +79,53 @@ namespace RS
 
         private void HandleRotations()
         {
-            leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontal_Input * leftAndRightRotationSpeed) * Time.deltaTime;
-            upAndDownLookAngle -= (PlayerInputManager.instance.cameraVertical_Input * upAndDownRotationSpeed) * Time.deltaTime;
-            upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
+            if (player.playerNetworkManager.isLockedOn.Value)
+            {
+                // Left/Right Rotation
+                Vector3 rotationDirection =
+                    player.playerCombatManager.currentTarget.characterCombatManager.lockOnTargetTransform.position -
+                    transform.position;
+                rotationDirection.Normalize();
+                rotationDirection.y = 0;
 
-            Vector3 cameraRotation = Vector3.zero;
-            Quaternion targetRotation;
+                Quaternion targetRotation = Quaternion.LookRotation(rotationDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lockOnTargetFollowSpeed);
+                
+                // Up/Down rotation
+                rotationDirection =
+                    player.playerCombatManager.currentTarget.characterCombatManager.lockOnTargetTransform.position -
+                    cameraPivotTransform.position;
+                rotationDirection.Normalize();
+
+                targetRotation = Quaternion.LookRotation(rotationDirection);
+                cameraPivotTransform.transform.rotation = Quaternion.Slerp(cameraPivotTransform.rotation,
+                    targetRotation, lockOnTargetFollowSpeed);
+                
+                // Save rotation values to avoid snap
+                leftAndRightLookAngle = transform.eulerAngles.y;
+                upAndDownLookAngle = transform.eulerAngles.x;
+
+            }
+            else
+            {
+                leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontal_Input * leftAndRightRotationSpeed) * Time.deltaTime;
+                upAndDownLookAngle -= (PlayerInputManager.instance.cameraVertical_Input * upAndDownRotationSpeed) * Time.deltaTime;
+                upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
+
+                Vector3 cameraRotation = Vector3.zero;
+                Quaternion targetRotation;
             
-            // Left Right
-            cameraRotation.y = leftAndRightLookAngle;
-            targetRotation = Quaternion.Euler(cameraRotation);
-            transform.rotation = targetRotation;
+                // Left Right
+                cameraRotation.y = leftAndRightLookAngle;
+                targetRotation = Quaternion.Euler(cameraRotation);
+                transform.rotation = targetRotation;
 
-            // Up Down
-            cameraRotation = Vector3.zero;
-            cameraRotation.x = upAndDownLookAngle;
-            targetRotation = Quaternion.Euler(cameraRotation);
-            cameraPivotTransform.localRotation = targetRotation;
+                // Up Down
+                cameraRotation = Vector3.zero;
+                cameraRotation.x = upAndDownLookAngle;
+                targetRotation = Quaternion.Euler(cameraRotation);
+                cameraPivotTransform.localRotation = targetRotation;
+            }
         }
 
         private void HandleCollisions()
@@ -119,7 +154,7 @@ namespace RS
 
         public void HandleLocatingLockedOnTargets()
         {
-            float shortDistance = Mathf.Infinity;               // Shortest Target to player
+            float shortestDistance = Mathf.Infinity;            // Shortest Target to player
             float shortDistanceOfRightTarget = Mathf.Infinity;  // Shortest Target to the right of current Target
             float shortDistanceOfLeftTarget = -Mathf.Infinity;  // Shortest Target to the left of current Target
             
@@ -148,11 +183,9 @@ namespace RS
                     // If target is player check next target
                     if(lockOnTarget.transform.root == player.transform.root)
                         continue; 
+
                     
-                    // If target is too far away check next target
-                    if(distanceFromTarget > maximumLockOnDistance)
-                        continue;
-                    
+                    // If the target is outside of FOV or blocked by environment continue to next target
                     if (viewableAngle >= minimumViewAbleAngle && viewableAngle <= maximumViewAbleAngle)
                     {
                         RaycastHit hit;
@@ -164,11 +197,37 @@ namespace RS
                         }
                         else
                         {
-                            Debug.Log("Success HIT!");
+                            availableTargets.Add(lockOnTarget);
                         }
                     }
                 }
             }
+    
+            // Sort through potential targets and check which to lock on
+            for (int j = 0; j < availableTargets.Count; j++)
+            {
+                if (availableTargets[j] != null)
+                {
+                    float distanceFromTarget = Vector3.Distance(player.transform.position, availableTargets[j].transform.position);
+
+                    if (distanceFromTarget < shortestDistance)
+                    {
+                        shortestDistance = distanceFromTarget;
+                        nearestLockOnTarget = availableTargets[j];
+                    }
+                }
+                else
+                {
+                    ClearLockOnTargets();
+                    player.playerNetworkManager.isLockedOn.Value = false;
+                }
+            }
+        }
+
+        public void ClearLockOnTargets()
+        {
+            nearestLockOnTarget = null;
+            availableTargets.Clear();
         }
     }
 }
