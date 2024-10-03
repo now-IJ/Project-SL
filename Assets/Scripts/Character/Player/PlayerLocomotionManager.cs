@@ -54,7 +54,14 @@ namespace RS
                 horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
                 moveAmount = player.characterNetworkManager.moveAmount.Value;
                 
-                player.playerAnimationManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
+                if (!player.playerNetworkManager.isLockedOn.Value || player.playerNetworkManager.isSprinting.Value)
+                {
+                    player.playerAnimationManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
+                }
+                else
+                {
+                    player.playerAnimationManager.UpdateAnimatorMovementParameters(horizontalMovement, verticalMovement, player.playerNetworkManager.isSprinting.Value);
+                }
             }
         }
 
@@ -129,23 +136,63 @@ namespace RS
 
         private void HandleRotation()
         {
-            if(!player.canRotate)
+            if(player.playerNetworkManager.isDead.Value)
                 return;
             
-            targetRotationDirection = Vector3.zero;
-            targetRotationDirection = PlayerCamera.instance.cameraObject.transform.forward * verticalMovement;
-            targetRotationDirection += PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;
-            targetRotationDirection.Normalize();
-            targetRotationDirection.y = 0;
+            if(!player.canRotate)
+                return;
 
-            if (targetRotationDirection == Vector3.zero)
+            if (player.playerNetworkManager.isLockedOn.Value)
             {
-                targetRotationDirection = transform.forward;
-            }
+                if (player.playerNetworkManager.isSprinting.Value || player.playerLocomotionManager.isRolling)
+                {
+                    targetRotationDirection = Vector3.zero;
+                    targetRotationDirection = PlayerCamera.instance.cameraObject.transform.forward * verticalMovement;
+                    targetRotationDirection += PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;
+                    targetRotationDirection.Normalize();
+                    targetRotationDirection.y = 0;
 
-            Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
-            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
-            transform.rotation = targetRotation;
+                    if (targetRotationDirection == Vector3.zero)
+                    {
+                        targetRotationDirection = transform.forward;
+                    }
+
+                    Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
+                    Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
+                    transform.rotation = targetRotation;
+                }
+                else
+                {
+                    if(player.playerCombatManager.currentTarget == null)
+                        return;
+
+                    Vector3 targetDirection;
+                    targetDirection = player.playerCombatManager.currentTarget.transform.position - transform.position;
+                    targetDirection.Normalize();
+                    targetDirection.y = 0;
+                    
+                    Quaternion newRotation = Quaternion.LookRotation(targetDirection);
+                    Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
+                    transform.rotation = targetRotation;
+                }
+            }
+            else
+            {
+                targetRotationDirection = Vector3.zero;
+                targetRotationDirection = PlayerCamera.instance.cameraObject.transform.forward * verticalMovement;
+                targetRotationDirection += PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;
+                targetRotationDirection.Normalize();
+                targetRotationDirection.y = 0;
+
+                if (targetRotationDirection == Vector3.zero)
+                {
+                    targetRotationDirection = transform.forward;
+                }
+
+                Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
+                Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
+                transform.rotation = targetRotation;
+            }
         }
         
         public void HandleSprinting()
@@ -199,6 +246,7 @@ namespace RS
                 player.transform.rotation = playerRotation;
                 
                 player.playerAnimationManager.PlayTargetActionAnimation("Roll_Forward_01", true, true);
+                player.playerLocomotionManager.isRolling = true;
             }
             // If not perform a backstep
             else

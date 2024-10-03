@@ -21,6 +21,9 @@ namespace RS
 
         [Header("Lock-On input")] 
         [SerializeField] private bool lockOn_Input;
+        [SerializeField] private bool lockOn_Left_Input;
+        [SerializeField] private bool lockOn_Right_Input;
+        private Coroutine lockOnCoroutine;
         
         [Header("Movement input")]
         private Vector2 movement_Input;
@@ -98,6 +101,8 @@ namespace RS
                 playerControls.PlayerActions.Jump.performed += i => jump_Input = true;
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
                 playerControls.PlayerActions.LockOn.performed += i => lockOn_Input = true;
+                playerControls.PlayerActions.SeekLeftLockOnTarget.performed += i => lockOn_Left_Input = true;
+                playerControls.PlayerActions.SeekRightLockOnTarget.performed += i => lockOn_Right_Input = true;
             }
             
             playerControls.Enable();
@@ -131,6 +136,7 @@ namespace RS
         private void HandleAllInputs()
         {
             HandleLockOnInput();
+            HandleLockOnSwitchTargetInput();
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
             HandleDodgeInput();
@@ -156,6 +162,12 @@ namespace RS
                 }        
                 
                 // Attempt to find new target
+                
+                // Only one coroutine at a time
+                if(lockOnCoroutine != null)
+                    StopCoroutine(lockOnCoroutine);
+
+                lockOnCoroutine = StartCoroutine(PlayerCamera.instance.WaitThenFindNewTarget());
             }
             
             if (lockOn_Input && player.playerNetworkManager.isLockedOn.Value)
@@ -181,7 +193,38 @@ namespace RS
                 }
             }    
         }
-        
+
+        private void HandleLockOnSwitchTargetInput()
+        {
+            if (lockOn_Left_Input)
+            {
+                lockOn_Left_Input = false;
+
+                if (player.playerNetworkManager.isLockedOn.Value)
+                {
+                    PlayerCamera.instance.HandleLocatingLockedOnTargets();
+
+                    if (PlayerCamera.instance.leftLockOnTarget != null)
+                    {
+                        player.playerCombatManager.SetTarget(PlayerCamera.instance.leftLockOnTarget);
+                    }
+                }
+            }
+            if (lockOn_Right_Input)
+            {
+                lockOn_Right_Input= false;
+
+                if (player.playerNetworkManager.isLockedOn.Value)
+                {
+                    PlayerCamera.instance.HandleLocatingLockedOnTargets();
+
+                    if (PlayerCamera.instance.rightLockOnTarget != null)
+                    {
+                        player.playerCombatManager.SetTarget(PlayerCamera.instance.rightLockOnTarget);
+                    }
+                }
+            }
+        }
         
         // MOVEMENT
         
@@ -203,8 +246,16 @@ namespace RS
             
             if(player == null) 
                 return;
+
+            if (!player.playerNetworkManager.isLockedOn.Value || player.playerNetworkManager.isSprinting.Value)
+            {
+                player.playerAnimationManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
+            }
+            else
+            {
+                player.playerAnimationManager.UpdateAnimatorMovementParameters(horizontal_Input, vertical_Input, player.playerNetworkManager.isSprinting.Value);
+            }
             
-            player.playerAnimationManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
         }
 
         private void HandleCameraMovementInput()

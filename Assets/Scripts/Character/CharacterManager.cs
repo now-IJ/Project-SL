@@ -17,6 +17,8 @@ namespace RS
         [HideInInspector] public CharacterAnimationManager characterAnimationManager;
         [HideInInspector] public CharacterCombatManager characterCombatManager;
         [HideInInspector] public CharacterSoundFXManager characterSoundFXManager;
+        [HideInInspector] public CharacterLocomotionManager characterLocomotionManager;
+        
         
         [Header("Flags")] 
         public bool isPerformingAction = false;
@@ -36,6 +38,7 @@ namespace RS
             characterAnimationManager = GetComponent<CharacterAnimationManager>();
             characterCombatManager = GetComponent<CharacterCombatManager>();
             characterSoundFXManager = GetComponent<CharacterSoundFXManager>();
+            characterLocomotionManager = GetComponent<CharacterLocomotionManager>();
         }
 
         protected virtual void Start()
