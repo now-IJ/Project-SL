@@ -1,4 +1,4 @@
-using System;
+
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -50,6 +50,7 @@ namespace RS
             damageEffect.fireDamage = fireDamage;
             damageEffect.lightningDamage = lightningDamage;
             damageEffect.holyDamage = holyDamage;
+            damageEffect.angleHitFrom =Vector3.SignedAngle(characterCausingDamage.transform.forward, damagedTarget.transform.forward, Vector3.up);
 
             switch (characterCausingDamage.characterCombatManager.currentAttackType)
             {
@@ -57,7 +58,7 @@ namespace RS
                     ApplyAttackDamageModifiers(light_Attack_01_Modifier, damageEffect);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    break;
             }
             
             //damagedTarget.characterEffectsManager.ProcessInstantEffects(damageEffect);
