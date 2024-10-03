@@ -85,8 +85,8 @@ namespace RS
             }
         }
 
-        // Animation
         
+        // Animation
         [ServerRpc]
         public void NotifyServerOfActionAnimationServerRPC(ulong ClientID, string animationID, bool applyRootMotion)
         {
@@ -111,8 +111,8 @@ namespace RS
             character.animator.CrossFade(animationID, 0.2f);
         }
         
-        // Attack Animation
         
+        // Attack Animation
         [ServerRpc]
         public void NotifyServerOfAttackActionAnimationServerRPC(ulong ClientID, string animationID, bool applyRootMotion)
         {
@@ -135,6 +135,86 @@ namespace RS
         {
             character.applyRootMotion = applyRootMotion;
             character.animator.CrossFade(animationID, 0.2f);
+        }
+        
+        
+        // DAMAGE
+        [ServerRpc(RequireOwnership = false)]
+        public void NotifyServerOfCharacterDamageServerRPC(
+            ulong damagedCharacterID,
+            ulong characterCausingDamageID,
+            float physicalDamage,
+            float magicDamage,
+            float fireDamage,
+            float lightningDamage,
+            float holyDamage,
+            float poiseDamage,
+            float angleHitFrom,
+            float contactPointX,
+            float contactPointY,
+            float contactPointZ)
+        {
+            if (IsServer)
+            {
+                NotifyServerOfCharacterDamageClientRPC(damagedCharacterID, characterCausingDamageID, physicalDamage,
+                    magicDamage, fireDamage, lightningDamage, holyDamage, poiseDamage, angleHitFrom, contactPointX, contactPointY,
+                    contactPointZ);
+            }
+        }
+        
+        [ClientRpc]
+        public void NotifyServerOfCharacterDamageClientRPC(
+            ulong damagedCharacterID,
+            ulong characterCausingDamageID,
+            float physicalDamage,
+            float magicDamage,
+            float fireDamage,
+            float lightningDamage,
+            float holyDamage,
+            float poiseDamage,
+            float angleHitFrom,
+            float contactPointX,
+            float contactPointY,
+            float contactPointZ)
+        {
+            PerformCharacterDamageFromServer(damagedCharacterID, characterCausingDamageID, physicalDamage, magicDamage,
+                fireDamage, lightningDamage, holyDamage, poiseDamage, angleHitFrom, contactPointX, contactPointY, contactPointZ);
+        }
+        
+        public void PerformCharacterDamageFromServer(
+            ulong damagedCharacterID,
+            ulong characterCausingDamageID,
+            float physicalDamage,
+            float magicDamage,
+            float fireDamage,
+            float lightningDamage,
+            float holyDamage,
+            float poiseDamage,
+            float angleHitFrom,
+            float contactPointX,
+            float contactPointY,
+            float contactPointZ)
+        {
+            CharacterManager damagedCharacter = 
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects[damagedCharacterID].gameObject.GetComponent<CharacterManager>();
+            
+            CharacterManager characterCausingDamage =
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects[characterCausingDamageID].gameObject.GetComponent<CharacterManager>();
+
+            TakeDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.takeDamageEffect);
+
+
+            damageEffect.physicalDamage = physicalDamage;
+            damageEffect.magicDamage = magicDamage;
+            damageEffect.fireDamage = fireDamage;
+            damageEffect.lightningDamage = lightningDamage;
+            damageEffect.holyDamage = holyDamage;
+            damageEffect.poiseDamage = poiseDamage;
+            damageEffect.angleHitFrom = angleHitFrom;
+            damageEffect.contactPoint = new Vector3(contactPointX, contactPointY, contactPointZ);
+            damageEffect.characterCausingDamage = characterCausingDamage;
+            
+            damagedCharacter.characterEffectsManager.ProcessInstantEffects(damageEffect);
         }
     }
 }

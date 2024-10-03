@@ -15,6 +15,7 @@ namespace RS
         [HideInInspector] public CharacterNetworkManager characterNetworkManager;
         [HideInInspector] public CharacterEffectsManager characterEffectsManager;
         [HideInInspector] public CharacterAnimationManager characterAnimationManager;
+        [HideInInspector] public CharacterCombatManager characterCombatManager;
         
         [Header("Flags")] 
         public bool isPerformingAction = false;
@@ -32,6 +33,7 @@ namespace RS
             characterNetworkManager = GetComponent<CharacterNetworkManager>();
             characterEffectsManager = GetComponent<CharacterEffectsManager>();
             characterAnimationManager = GetComponent<CharacterAnimationManager>();
+            characterCombatManager = GetComponent<CharacterCombatManager>();
         }
 
         protected virtual void Start()

@@ -7,7 +7,7 @@ namespace RS
     public class DamageCollider : MonoBehaviour
     {
         [Header("Collider")] 
-        protected Collider damageCollider;
+        [SerializeField] protected Collider damageCollider;
         
         [Header("Damage")] 
         public float physicalDamage = 25;
@@ -20,9 +20,14 @@ namespace RS
         protected Vector3 contactPoint;
 
         [Header("Characters Damaged")] 
-        private List<CharacterManager> charactersDamaged = new List<CharacterManager>();
+        protected List<CharacterManager> charactersDamaged = new List<CharacterManager>();
 
-        private void OnTriggerEnter(Collider other)
+        protected virtual void Awake()
+        {
+            
+        }
+
+        protected virtual void OnTriggerEnter(Collider other)
         {
             CharacterManager damagedTarget = other.GetComponentInParent<CharacterManager>();
 

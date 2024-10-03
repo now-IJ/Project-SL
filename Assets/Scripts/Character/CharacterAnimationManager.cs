@@ -32,8 +32,12 @@ namespace RS
             
         }
 
-        public virtual void PlayTargetActionAnimation(string targetAnimation, bool isPerformingAction,
-            bool applyRootMotion = true, bool canRotate = false, bool canMove = false)
+        public virtual void PlayTargetActionAnimation(
+            string targetAnimation, 
+            bool isPerformingAction,
+            bool applyRootMotion = true, 
+            bool canRotate = false, 
+            bool canMove = false)
         {
             character.animator.CrossFade(targetAnimation, 0.2f);
             character.isPerformingAction = isPerformingAction;
@@ -44,10 +48,16 @@ namespace RS
             character.characterNetworkManager.NotifyServerOfActionAnimationServerRPC
             (NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
         }
-        
-        public virtual void PlayTargetAttackActionAnimation(string targetAnimation, bool isPerformingAction,
-            bool applyRootMotion = true, bool canRotate = false, bool canMove = false)
+
+        public virtual void PlayTargetAttackActionAnimation(
+            AttackType attackType, 
+            string targetAnimation,
+            bool isPerformingAction,
+            bool applyRootMotion = true, 
+            bool canRotate = false, 
+            bool canMove = false)
         {
+            character.characterCombatManager.currentAttackType = attackType;
             character.animator.CrossFade(targetAnimation, 0.2f);
             character.isPerformingAction = isPerformingAction;
             character.applyRootMotion = applyRootMotion;

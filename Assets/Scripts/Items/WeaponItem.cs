@@ -25,10 +25,12 @@ namespace RS
         [Header("Weapon Base Poise Damage")] 
         public float poiseDamage = 10;
         
-        // Weapon modifiers
-
-        [Header("Stamina Costs")] 
+        [Header("Attack Modifiers")]
+        public float light_Attack_01_Modifier = 1;
+        
+        [Header("Stamina Costs Modifiers")] 
         public int baseStaminaCost = 20;
+        public float lightAttackStaminaCostMultiplier = 1;
         
         [Header("Actions")]
         public WeaponItemAction oh_rb_Action;

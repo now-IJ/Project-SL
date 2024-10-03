@@ -28,7 +28,7 @@ namespace RS
         {
             if (playerPerformingAction.playerNetworkManager.isUsingRightHand.Value)
             {
-                playerPerformingAction.playerAnimationManager.PlayTargetAttackActionAnimation(light_Attack_01, true);
+                playerPerformingAction.playerAnimationManager.PlayTargetAttackActionAnimation(AttackType.LightAttack01, light_Attack_01, true);
             }
 
             if (playerPerformingAction.playerNetworkManager.isUsingLeftHand.Value)
