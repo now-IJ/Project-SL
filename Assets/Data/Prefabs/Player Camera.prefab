@@ -200,7 +200,7 @@ MonoBehaviour:
   minimumViewAbleAngle: -50
   maximumViewAbleAngle: 50
   maximumLockOnDistance: 20
-  lockOnTargetFollowSpeed: 0.2
+  lockOnTargetFollowSpeed: 1
   setCameraHeightSpeed: 0.05
   unlockedCameraHeight: 1.65
   lockedCameraHeight: 2

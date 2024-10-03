@@ -48,6 +48,9 @@ namespace RS
         
         public NetworkVariable<bool> isJumping = new NetworkVariable<bool>
             (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
+        public NetworkVariable<bool> isChargingAttack = new NetworkVariable<bool>
+            (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         
         [Header("Stats")] 
@@ -107,6 +110,11 @@ namespace RS
             {
                 character.characterCombatManager.currentTarget = null;
             }
+        }
+
+        public void OnIsChargingAttackChanged(bool oldStatus, bool newStatus)
+        {
+            character.animator.SetBool("IsChargingAttack", isChargingAttack.Value);
         }
         
         // Animation

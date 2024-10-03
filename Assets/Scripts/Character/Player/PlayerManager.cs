@@ -101,12 +101,62 @@ namespace RS
 
             playerNetworkManager.currentWeaponBeingUsed.OnValueChanged +=
                 playerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
+            
+            // Flags
+            playerNetworkManager.isChargingAttack.OnValueChanged +=
+                playerNetworkManager.OnIsChargingAttackChanged;
 
             // Connecting as client
             if (IsOwner && !IsServer)
             {
                 LoadGameDataToCurrentCharacterData(ref WorldSaveGameManager.instance.currentCharacterData);
             }
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnectedCallback;
+            
+            if (IsOwner)
+            {
+                // Update the total amount of health or stamina when the stat linked to either changes
+                playerNetworkManager.vitality.OnValueChanged += playerNetworkManager.SetNewMaxHealthValue;
+                playerNetworkManager.endurance.OnValueChanged += playerNetworkManager.SetNewMaxStaminaValue;
+                
+                // Updates UI stat bars when a stat changes
+                playerNetworkManager.currentHealth.OnValueChanged -=
+                    PlayerUIManager.instance.playerUIHudManager.SetNewHealthValue;
+
+                playerNetworkManager.currentStamina.OnValueChanged -=
+                    PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
+                
+                playerNetworkManager.currentStamina.OnValueChanged -=
+                    playerStatsManager.ResetStaminaRegenerationTimer;
+            }
+
+            // Stats
+            playerNetworkManager.currentHealth.OnValueChanged -= playerNetworkManager.CheckHP;
+
+            // Lock On
+            playerNetworkManager.isLockedOn.OnValueChanged += playerNetworkManager.OnCurrentIsLockedOnChanged;
+            playerNetworkManager.currentTargetNetworkObjectID.OnValueChanged -=
+                playerNetworkManager.OnCurrentLockOnTargetIDChange;
+            
+            // Equipment
+            playerNetworkManager.currentRightHandedWeaponID.OnValueChanged -=
+                playerNetworkManager.OnCurrentRightHandWeaponIDChanged;
+
+            playerNetworkManager.currentLeftHandedWeaponID.OnValueChanged -=
+                playerNetworkManager.OnCurrenLeftHandWeaponIDChanged;
+
+            playerNetworkManager.currentWeaponBeingUsed.OnValueChanged -=
+                playerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
+            
+            // Flags
+            playerNetworkManager.isChargingAttack.OnValueChanged -=
+                playerNetworkManager.OnIsChargingAttackChanged;
         }
 
         private void OnClientConnectedCallback(ulong clientID)

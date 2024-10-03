@@ -98,7 +98,7 @@ namespace RS
             {
                 snappedHorizontal = -0.5f;
             }
-            else if(horizontalMovement > -0.5f && horizontalMovement >= -1f)
+            else if(horizontalMovement < -0.5f && horizontalMovement >= -1f)
             {
                 snappedHorizontal = -1;
             }
@@ -120,7 +120,7 @@ namespace RS
             {
                 snappedVertical = -0.5f;
             }
-            else if(verticalMovement > -0.5f && verticalMovement >= -1f)
+            else if(verticalMovement < -0.5f && verticalMovement >= -1f)
             {
                 snappedVertical = -1;
             }

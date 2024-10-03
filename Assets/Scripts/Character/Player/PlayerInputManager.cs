@@ -35,8 +35,16 @@ namespace RS
         [SerializeField] private bool dodge_Input = false;
         [SerializeField] private bool sprint_Input = false;
         [SerializeField] private bool jump_Input = false;
+        
+        [Header("Bumper Input")]
         [SerializeField] private bool RB_Input = false;
+        
+        [Header("Trigger Inputs")]
+        [SerializeField] private bool RT_Input = false;
+        [SerializeField] private bool Hold_RT_Input = false;
 
+        
+        
         private void Awake()
         {
             if (instance == null)
@@ -92,14 +100,26 @@ namespace RS
             {
                 playerControls = new PlayerControls();
 
+                // MOVEMENT AND CAMERA
                 playerControls.PlayerMovement.Movement.performed += i => movement_Input = i.ReadValue<Vector2>();
                 playerControls.PlayerCamera.Movement.performed += i => camera_Input = i.ReadValue<Vector2>();
                 playerControls.PlayerCamera.Mouse.performed += i => camera_Input = i.ReadValue<Vector2>();
+                
+                // MOVEMENT ACTIONS
                 playerControls.PlayerActions.Dodge.performed += i => dodge_Input = true;
                 playerControls.PlayerActions.Sprint.performed += i => sprint_Input = true;
                 playerControls.PlayerActions.Sprint.canceled += i => sprint_Input = false;
                 playerControls.PlayerActions.Jump.performed += i => jump_Input = true;
+                
+                // Bumpers
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
+                
+                // TRIGGERS
+                playerControls.PlayerActions.RT.performed += i => RT_Input = true;
+                playerControls.PlayerActions.RTHold.performed += i => Hold_RT_Input = true;
+                playerControls.PlayerActions.RTHold.canceled += i => Hold_RT_Input = false;
+                
+                // LOCK ON
                 playerControls.PlayerActions.LockOn.performed += i => lockOn_Input = true;
                 playerControls.PlayerActions.SeekLeftLockOnTarget.performed += i => lockOn_Left_Input = true;
                 playerControls.PlayerActions.SeekRightLockOnTarget.performed += i => lockOn_Right_Input = true;
@@ -143,6 +163,8 @@ namespace RS
             HandleSprintInput();
             HandleJumpInput();
             HandleRBInput();
+            HandleRTInput();
+            HandleHoldRTInput();
         }
 
         
@@ -310,6 +332,32 @@ namespace RS
                 player.playerCombatManager.PerformWeaponBasedAction(
                     player.playerInventoryManager.currentRightHandWeapon.oh_rb_Action,
                     player.playerInventoryManager.currentRightHandWeapon);
+            }
+        }
+
+        private void HandleRTInput()
+        {
+            if (RT_Input)
+            {
+                RT_Input = false;
+                
+                player.playerNetworkManager.SetCharacterActionHand(true);
+
+                player.playerCombatManager.PerformWeaponBasedAction(
+                    player.playerInventoryManager.currentRightHandWeapon.oh_rt_Action,
+                    player.playerInventoryManager.currentRightHandWeapon);
+            }
+        }
+        
+        private void HandleHoldRTInput()
+        {
+            // Only check if already in charging action
+            if (player.isPerformingAction)
+            {
+                if (player.playerNetworkManager.isUsingRightHand.Value)
+                {
+                    player.playerNetworkManager.isChargingAttack.Value = Hold_RT_Input;
+                }
             }
         }
     }
