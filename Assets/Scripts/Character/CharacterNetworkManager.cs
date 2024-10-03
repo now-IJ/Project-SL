@@ -35,6 +35,9 @@ namespace RS
             (0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         [Header("Flags")] 
+        public NetworkVariable<bool> isLockedOn = new NetworkVariable<bool>
+            (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
         public NetworkVariable<bool> isSprinting = new NetworkVariable<bool>
             (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         

@@ -61,7 +61,7 @@ namespace RS
 
         protected void OnDrawGizmosSelected()
         {
-           // Gizmos.DrawSphere(character.transform.position, groundCheckRadius);
+           //Gizmos.DrawSphere(character.transform.position, 20);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace RS
     {
         private PlayerManager player;
 
+        [Header("Current Weapon")]
         public WeaponItem currentWeaponBeingUsed;
 
         protected override void Awake()

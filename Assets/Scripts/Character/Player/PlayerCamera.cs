@@ -30,6 +30,12 @@ namespace RS
         private Vector3 cameraObjectPosition;
         private float cameraZPosition;
         private float targetCameraZPosition;
+
+        [Header("Lock On")] 
+        [SerializeField] private float lockOnRadius = 20;
+        [SerializeField] private float minimumViewAbleAngle = -50;
+        [SerializeField] private float maximumViewAbleAngle = 50;
+        [SerializeField] private float maximumLockOnDistance = 20;
         
         private void Awake()
         {
@@ -68,8 +74,8 @@ namespace RS
 
         private void HandleRotations()
         {
-            leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontalInput * leftAndRightRotationSpeed) * Time.deltaTime;
-            upAndDownLookAngle -= (PlayerInputManager.instance.cameraVerticalInput * upAndDownRotationSpeed) * Time.deltaTime;
+            leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontal_Input * leftAndRightRotationSpeed) * Time.deltaTime;
+            upAndDownLookAngle -= (PlayerInputManager.instance.cameraVertical_Input * upAndDownRotationSpeed) * Time.deltaTime;
             upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
 
             Vector3 cameraRotation = Vector3.zero;
@@ -109,6 +115,60 @@ namespace RS
             cameraObjectPosition.z = Mathf.Lerp(cameraObject.transform.localPosition.z, targetCameraZPosition, 0.2f);
             cameraObject.transform.localPosition = cameraObjectPosition;
 
+        }
+
+        public void HandleLocatingLockedOnTargets()
+        {
+            float shortDistance = Mathf.Infinity;               // Shortest Target to player
+            float shortDistanceOfRightTarget = Mathf.Infinity;  // Shortest Target to the right of current Target
+            float shortDistanceOfLeftTarget = -Mathf.Infinity;  // Shortest Target to the left of current Target
+            
+            
+            Collider[] colliders = Physics.OverlapSphere(player.transform.position, lockOnRadius, WorldUtilityManager.instance.GetCharacterLayers());
+            
+            
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                
+                CharacterManager lockOnTarget = colliders[i].GetComponent<CharacterManager>();
+
+                Debug.Log(colliders[i].ToString());
+                
+                if (lockOnTarget != null)
+                {
+                    // Check if they are within our FOV
+                    Vector3 lockOnTargetsDirection = lockOnTarget.transform.position - player.transform.position;
+                    float distanceFromTarget = Vector3.Distance(player.transform.position, lockOnTarget.transform.position);
+                    float viewableAngle = Vector3.Angle(lockOnTargetsDirection, cameraObject.transform.forward);
+                    
+                    // If target is dead check next target
+                    if (lockOnTarget.characterNetworkManager.isDead.Value)
+                        continue;
+                    
+                    // If target is player check next target
+                    if(lockOnTarget.transform.root == player.transform.root)
+                        continue; 
+                    
+                    // If target is too far away check next target
+                    if(distanceFromTarget > maximumLockOnDistance)
+                        continue;
+                    
+                    if (viewableAngle >= minimumViewAbleAngle && viewableAngle <= maximumViewAbleAngle)
+                    {
+                        RaycastHit hit;
+                        
+                        if (Physics.Linecast(player.playerCombatManager.lockOnTargetTransform.position,
+                                lockOnTarget.characterCombatManager.lockOnTargetTransform.position, out hit,WorldUtilityManager.instance.GetEnvironmentLayers()))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Debug.Log("Success HIT!");
+                        }
+                    }
+                }
+            }
         }
     }
 }

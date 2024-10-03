@@ -68,8 +68,8 @@ namespace RS
 
         private void SetMovementValues()
         {
-            verticalMovement = PlayerInputManager.instance.verticalInput;
-            horizontalMovement = PlayerInputManager.instance.horizontalInput;
+            verticalMovement = PlayerInputManager.instance.vertical_Input;
+            horizontalMovement = PlayerInputManager.instance.horizontal_Input;
             moveAmount = PlayerInputManager.instance.moveAmount;
         }
 
@@ -118,8 +118,8 @@ namespace RS
             {
                 Vector3 freeFallDirection;
                 
-                freeFallDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.verticalInput;
-                freeFallDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontalInput;
+                freeFallDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
+                freeFallDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontal_Input;
                 freeFallDirection.y = 0;
 
                 player.characterController.Move(freeFallDirection * freeFallSpeed * Time.deltaTime);
@@ -228,8 +228,8 @@ namespace RS
             
             player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
             
-            jumpDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.verticalInput;
-            jumpDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontalInput;
+            jumpDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
+            jumpDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontal_Input;
 
             jumpDirection.y = 0;
 

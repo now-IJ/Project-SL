@@ -15,20 +15,23 @@ namespace RS
         
         
         [Header("Camera input")]
-        [SerializeField] private Vector2 cameraInput;
-        public float cameraVerticalInput;
-        public float cameraHorizontalInput;
+        [SerializeField] private Vector2 camera_Input;
+        public float cameraVertical_Input;
+        public float cameraHorizontal_Input;
+
+        [Header("Lock-On input")] 
+        [SerializeField] private bool lockOn_Input;
         
         [Header("Movement input")]
-        [SerializeField] private Vector2 movementInput;
-        public float verticalInput;
-        public float horizontalInput;
+        private Vector2 movement_Input;
+        public float vertical_Input;
+        public float horizontal_Input;
         public float moveAmount;
-
+        
         [Header("Player Actions")] 
-        [SerializeField] private bool dodgeInput = false;
-        [SerializeField] private bool sprintInput = false;
-        [SerializeField] private bool jumpInput = false;
+        [SerializeField] private bool dodge_Input = false;
+        [SerializeField] private bool sprint_Input = false;
+        [SerializeField] private bool jump_Input = false;
         [SerializeField] private bool RB_Input = false;
 
         private void Awake()
@@ -86,14 +89,15 @@ namespace RS
             {
                 playerControls = new PlayerControls();
 
-                playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
-                playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
-                playerControls.PlayerCamera.Mouse.performed += i => cameraInput = i.ReadValue<Vector2>();
-                playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
-                playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
-                playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
-                playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
+                playerControls.PlayerMovement.Movement.performed += i => movement_Input = i.ReadValue<Vector2>();
+                playerControls.PlayerCamera.Movement.performed += i => camera_Input = i.ReadValue<Vector2>();
+                playerControls.PlayerCamera.Mouse.performed += i => camera_Input = i.ReadValue<Vector2>();
+                playerControls.PlayerActions.Dodge.performed += i => dodge_Input = true;
+                playerControls.PlayerActions.Sprint.performed += i => sprint_Input = true;
+                playerControls.PlayerActions.Sprint.canceled += i => sprint_Input = false;
+                playerControls.PlayerActions.Jump.performed += i => jump_Input = true;
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
+                playerControls.PlayerActions.LockOn.performed += i => lockOn_Input = true;
             }
             
             playerControls.Enable();
@@ -126,6 +130,7 @@ namespace RS
         
         private void HandleAllInputs()
         {
+            HandleLockOnInput();
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
             HandleDodgeInput();
@@ -135,14 +140,49 @@ namespace RS
         }
 
         
+        // Lock On
+        
+        private void HandleLockOnInput()
+        {
+            //Check for dead target
+            if (player.playerNetworkManager.isLockedOn.Value)
+            {
+                if (player.playerCombatManager.currentTarget == null)
+                    return;
+                
+                if (player.playerCombatManager.currentTarget.characterNetworkManager.isDead.Value)
+                {
+                    player.playerNetworkManager.isLockedOn.Value = false;
+                }        
+                
+                // Attempt to find new target
+            }
+            
+            if (lockOn_Input && player.playerNetworkManager.isLockedOn.Value)
+            {
+                lockOn_Input = false;
+                
+                // Disable Lock on
+                return;
+            }    
+            if (lockOn_Input && !player.playerNetworkManager.isLockedOn.Value)
+            {
+                lockOn_Input = false;
+
+                // Attempt to Lock On
+                PlayerCamera.instance.HandleLocatingLockedOnTargets();
+            }    
+        }
+        
+        
         // MOVEMENT
         
         private void HandlePlayerMovementInput()
         {
-            verticalInput = movementInput.y;
-            horizontalInput = movementInput.x;
+            vertical_Input = movement_Input.y;
+            horizontal_Input = movement_Input.x;
 
-            moveAmount = Mathf.Clamp01(Mathf.Abs(verticalInput) + Mathf.Abs(horizontalInput));
+            moveAmount = Mathf.Clamp01(Mathf.Abs(vertical_Input) + Mathf.Abs(horizontal_Input));
 
             if (moveAmount <= 0.5 && moveAmount > 0)
             {
@@ -161,8 +201,8 @@ namespace RS
 
         private void HandleCameraMovementInput()
         {
-            cameraVerticalInput = cameraInput.y;
-            cameraHorizontalInput = cameraInput.x;
+            cameraVertical_Input = camera_Input.y;
+            cameraHorizontal_Input = camera_Input.x;
         }
 
         
@@ -170,9 +210,9 @@ namespace RS
         
         private void HandleDodgeInput()
         {
-            if (dodgeInput)
+            if (dodge_Input)
             {
-                dodgeInput = false;
+                dodge_Input = false;
                 
                 player.playerLocomotionManager.AttemptToPerformDodge();
             }
@@ -180,7 +220,7 @@ namespace RS
 
         private void HandleSprintInput()
         {
-            if (sprintInput)
+            if (sprint_Input)
             {
                 player.playerLocomotionManager.HandleSprinting();
             }
@@ -192,9 +232,9 @@ namespace RS
 
         private void HandleJumpInput()
         {
-            if (jumpInput)
+            if (jump_Input)
             {
-                jumpInput = false;
+                jump_Input = false;
                 
                 player.playerLocomotionManager.AttemptToPerformJump();
             }
