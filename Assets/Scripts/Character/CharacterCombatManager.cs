@@ -7,8 +7,11 @@ namespace RS
 {
     public class CharacterCombatManager : NetworkBehaviour
     {
-        private CharacterManager character;
+        protected CharacterManager character;
 
+        [Header("Character Group")] 
+        public CharacterGroup characterGroup;
+        
         [Header("Last Attack Animation Performed")]
         public string lastAttackAnimationPerformed;
         

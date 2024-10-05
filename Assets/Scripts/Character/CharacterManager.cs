@@ -72,6 +72,11 @@ namespace RS
             }
         }
 
+        protected virtual void FixedUpdate()
+        {
+            
+        }
+
         protected virtual void LateUpdate()
         {
             

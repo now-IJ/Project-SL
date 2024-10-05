@@ -39,4 +39,10 @@ namespace RS
         ChargedAttack02,
         ChargedAttack03,
     }
+
+    public enum CharacterGroup
+    {
+        Team01,
+        Team02,
+    }
 }

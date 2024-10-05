@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 4845373367335082641}
   - component: {fileID: 3318066437562242394}
   - component: {fileID: 8652026500284110815}
-  - component: {fileID: 1676414778709140163}
+  - component: {fileID: 5353061376903259066}
   m_Layer: 6
   m_Name: Dummie
   m_TagString: Untagged
@@ -269,6 +269,8 @@ MonoBehaviour:
   applyRootMotion: 0
   canRotate: 1
   canMove: 1
+  aiCombatManager: {fileID: 0}
+  currentState: {fileID: 11400000, guid: 7168ddb38ce6ea4489437f09072e42ad, type: 2}
 --- !u!114 &1895887715559681184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428,7 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13adaa50632dc174aa096144b57d9224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1676414778709140163
+--- !u!114 &5353061376903259066
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -437,14 +439,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 2217712673872984425}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dbc7bf6c8a59304fbd2b2dab7e4c689, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a9071b86c189c545baea9ae50df45c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  characterGroup: 1
   lastAttackAnimationPerformed: 
   currentTarget: {fileID: 0}
   currentAttackType: 0
   lockOnTargetTransform: {fileID: 2483714522738287237}
+  detectionRadius: 15
+  minimumViewableAngle: -35
+  maximumViewableAngle: 35
 --- !u!1 &4561970880579436271
 GameObject:
   m_ObjectHideFlags: 0
