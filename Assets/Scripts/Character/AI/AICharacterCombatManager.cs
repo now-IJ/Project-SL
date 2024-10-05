@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 namespace RS{
-    public class AICombatManager : CharacterCombatManager
+    public class AICharacterCombatManager : CharacterCombatManager
     {
 
         [Header("Detection")] 

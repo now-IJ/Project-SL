@@ -10,14 +10,12 @@ namespace RS
             if (aiCharacter.characterCombatManager.currentTarget != null)
             {
                 // Return the pursue target
-                Debug.Log("HAS TARGET");
-                return this;
+                return SwitchState(aiCharacter, aiCharacter.pursueTarget);
             }
             else
             {
                 // Return this state to continuously search for a target
-                aiCharacter.aiCombatManager.FindATargetViaLineOfSight(aiCharacter);
-                Debug.Log("Searching Target");
+                aiCharacter.aiCharacterCombatManager.FindATargetViaLineOfSight(aiCharacter);
                 return this;
             }
 
