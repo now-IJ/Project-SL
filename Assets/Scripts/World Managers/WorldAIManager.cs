@@ -11,12 +11,8 @@ namespace RS
     {
         public static WorldAIManager instance;
 
-        [Header("DEBUG")]
-        [SerializeField] bool despawnCharacters = false;
-        [SerializeField] bool respawnCharacters = false;
-        
-        [Header("Characters")]
-        [SerializeField] GameObject[] aiCharacters;
+        [Header("Characters")] 
+        [SerializeField] private List<AICharacterSpawner> AICharacterSpawners;
         [SerializeField] private List<GameObject> spawnedCharacters = new List<GameObject>();
         
         private void Awake()
@@ -31,60 +27,13 @@ namespace RS
             }
         }
 
-        private void Start()
+        public void SpawnCharacter(AICharacterSpawner aiCharacterSpawner)
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                StartCoroutine(WaitForSceneToLoadThenSpawn());
+                AICharacterSpawners.Add(aiCharacterSpawner);
+                aiCharacterSpawner.AttemptToSpawnCharacter();
             }
-        }
-
-        private void Update()
-        {
-            if (despawnCharacters)
-            {
-                despawnCharacters = false;
-                DespawnAllCharacters();
-            }
-
-            if (respawnCharacters)
-            {
-                respawnCharacters = false;
-                SpawnAllCharacters();
-            }
-        }
-
-        private IEnumerator WaitForSceneToLoadThenSpawn()
-        {
-            while (!SceneManager.GetActiveScene().isLoaded)
-            {
-                yield return null;
-            }
-            
-            SpawnAllCharacters();
-        }
-
-        private void SpawnAllCharacters()
-        {
-            foreach (GameObject character in aiCharacters)
-            {
-                GameObject instantiatedCharacter = Instantiate(character);
-                instantiatedCharacter.GetComponent<NetworkObject>().Spawn();
-               spawnedCharacters.Add(instantiatedCharacter); 
-            }
-        }
-
-        private void DespawnAllCharacters()
-        {
-            foreach (GameObject character in spawnedCharacters)
-            {
-                character.GetComponent<NetworkObject>().Despawn();
-            }
-        }
-
-        private void DisableAllCharacters()
-        {
-            
         }
     }
 }
