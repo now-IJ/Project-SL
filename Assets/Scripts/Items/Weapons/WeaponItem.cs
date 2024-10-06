@@ -42,5 +42,8 @@ namespace RS
         [Header("Actions")]
         public WeaponItemAction oh_rb_Action;
         public WeaponItemAction oh_rt_Action;
+
+        [Header("Whooshes")] 
+        public AudioClip[] whooshes;
     }
 }

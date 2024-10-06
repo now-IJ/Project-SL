@@ -26,6 +26,7 @@ namespace RS
 
         public void OpenHandDamageCollider()
         {
+            aiCharacter.characterSoundFXManager.PlayAttackGrunt();
             attackDamageCollider.EnableDamageCollision();
         }
 
@@ -36,6 +37,7 @@ namespace RS
         
         public void OpenFootDamageCollider()
         {
+            aiCharacter.characterSoundFXManager.PlayAttackGrunt();
             footDamageCollider.EnableDamageCollision();
         }
 

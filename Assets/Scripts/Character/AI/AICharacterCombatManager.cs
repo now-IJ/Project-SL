@@ -4,6 +4,7 @@ using UnityEngine;
 namespace RS{
     public class AICharacterCombatManager : CharacterCombatManager
     {
+        protected AICharacterManager aiCharacter;
 
         [Header("Target Information")] 
         public float distanceToTarget;
@@ -25,6 +26,7 @@ namespace RS{
         {
             base.Awake();
 
+            aiCharacter = GetComponent<AICharacterManager>();
             lockOnTargetTransform = GetComponentInChildren<LockOnTransform>().transform;
         }
 

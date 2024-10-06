@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 222736984
+  GlobalObjectIdHash: 2625633907
   InScenePlacedSourceGlobalObjectIdHash: 3868611817
   DeferredDespawnTick: 0
   Ownership: 1
@@ -266,10 +266,6 @@ MonoBehaviour:
   characterSoundFXManager: {fileID: 0}
   characterLocomotionManager: {fileID: 0}
   isPerformingAction: 0
-  isGrounded: 1
-  applyRootMotion: 0
-  canRotate: 1
-  canMove: 1
   aiCharacterCombatManager: {fileID: 0}
   aiCharacterNetworkManager: {fileID: 0}
   aiCharacterLocomotionManager: {fileID: 0}
@@ -352,6 +348,9 @@ MonoBehaviour:
   groundedYVelocity: -20
   fallStartVelocity: -5
   isRolling: 0
+  isGrounded: 1
+  canRotate: 1
+  canMove: 1
 --- !u!114 &-7638205318129747704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,6 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastDamageAnimationPlayed: 
+  applyRootMotion: 0
   hit_Forward_Medium_01: hit_Forward_Medium_01
   hit_Forward_Medium_02: hit_Forward_Medium_02
   hit_Back_Medium_01: hit_Back_Medium_01
@@ -420,6 +420,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4a39e3aa245bf4e8a1be0177065048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageGrunts:
+  - {fileID: 8300000, guid: 142a55a1e950f3249bf9b968da5c2a7b, type: 3}
+  - {fileID: 8300000, guid: 8e4d6d186e46eb541a8212d884970db5, type: 3}
+  - {fileID: 8300000, guid: b603a45a8255787478b0690281970ded, type: 3}
+  - {fileID: 8300000, guid: edddffb3058bec148a952bf4a41041f3, type: 3}
+  - {fileID: 8300000, guid: 43d45362153ae274dae9c97ffb871a8c, type: 3}
+  - {fileID: 8300000, guid: bd14b05a0f34eb04ba92c4d6ced0c0ea, type: 3}
+  - {fileID: 8300000, guid: abcd7809f6d4f9e4d985b44aae4f0c6c, type: 3}
+  - {fileID: 8300000, guid: 58ac07e9a87c20c4a8ca6caa88ff9f9b, type: 3}
+  attackGrunts:
+  - {fileID: 8300000, guid: 1660a6b41a72e9d429cced8a5dbef7f3, type: 3}
+  - {fileID: 8300000, guid: ece4ac9de3f7f524a946988c09e509cb, type: 3}
+  - {fileID: 8300000, guid: fc7a642b58c9abb47a4f0c5129db9e4a, type: 3}
+  - {fileID: 8300000, guid: 2a2a20e97998a8447bc6b75eec7271d6, type: 3}
 --- !u!114 &494759833140928382
 MonoBehaviour:
   m_ObjectHideFlags: 0
