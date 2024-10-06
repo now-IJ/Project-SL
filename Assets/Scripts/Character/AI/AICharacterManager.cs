@@ -63,6 +63,7 @@ namespace RS
             {
                 aiCharacterCombatManager.targetsDirection = aiCharacterCombatManager.currentTarget.transform.position - transform.position;
                 aiCharacterCombatManager.viewableAngle = WorldUtilityManager.instance.GetAngleOfTarget(transform, aiCharacterCombatManager.targetsDirection);
+                aiCharacterCombatManager.distanceToTarget = Vector3.Distance(transform.position, aiCharacterCombatManager.currentTarget.transform.position);
             }
             
             if (navMeshAgent.enabled)

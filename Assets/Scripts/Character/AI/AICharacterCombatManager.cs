@@ -6,6 +6,7 @@ namespace RS{
     {
 
         [Header("Target Information")] 
+        public float distanceToTarget;
         public float viewableAngle;
         public Vector3 targetsDirection;
         
