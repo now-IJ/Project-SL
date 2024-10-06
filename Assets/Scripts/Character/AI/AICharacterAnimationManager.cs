@@ -19,7 +19,7 @@ namespace RS
             // Host
             if (aiCharacter.IsOwner)
             {
-                if (!aiCharacter.isGrounded)
+                if (!aiCharacter.aiCharacterLocomotionManager.isGrounded)
                     return;
 
                 Vector3 velocity = aiCharacter.animator.deltaPosition;
@@ -31,7 +31,7 @@ namespace RS
             // Client
             else
             {
-                if (!aiCharacter.isGrounded)
+                if (!aiCharacter.aiCharacterLocomotionManager.isGrounded)
                     return;
 
                 Vector3 velocity = aiCharacter.animator.deltaPosition;

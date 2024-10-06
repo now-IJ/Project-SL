@@ -22,10 +22,6 @@ namespace RS
         
         [Header("Flags")] 
         public bool isPerformingAction = false;
-        public bool isGrounded = true;
-        public bool applyRootMotion = false;
-        public bool canRotate = true;
-        public bool canMove = true;
         
         protected virtual void Awake()
         {
@@ -48,7 +44,7 @@ namespace RS
 
         protected virtual void Update()
         {
-            animator.SetBool("IsGrounded", isGrounded);
+            animator.SetBool("IsGrounded", characterLocomotionManager.isGrounded);
             
             if (IsOwner)
             {

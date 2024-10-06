@@ -14,6 +14,10 @@ namespace RS
         [Header("Damage Animations")] 
         public string lastDamageAnimationPlayed;
         
+        [Header("Flags")]
+        public bool applyRootMotion = false;
+        
+        [Header("Hit animations")]
         [SerializeField] private string hit_Forward_Medium_01 = "hit_Forward_Medium_01";
         [SerializeField] private string hit_Forward_Medium_02 = "hit_Forward_Medium_02";
         
@@ -150,9 +154,9 @@ namespace RS
             
             character.animator.CrossFade(targetAnimation, 0.2f);
             character.isPerformingAction = isPerformingAction;
-            character.applyRootMotion = applyRootMotion;
-            character.canRotate = canRotate;
-            character.canMove = canMove;
+            character.characterAnimationManager.applyRootMotion = applyRootMotion;
+            character.characterLocomotionManager.canRotate = canRotate;
+            character.characterLocomotionManager.canMove = canMove;
 
             character.characterNetworkManager.NotifyServerOfActionAnimationServerRPC
             (NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
@@ -170,9 +174,9 @@ namespace RS
             character.characterCombatManager.lastAttackAnimationPerformed = targetAnimation;
             character.animator.CrossFade(targetAnimation, 0.2f);
             character.isPerformingAction = isPerformingAction;
-            character.applyRootMotion = applyRootMotion;
-            character.canRotate = canRotate;
-            character.canMove = canMove;
+            character.characterAnimationManager.applyRootMotion = applyRootMotion;
+            character.characterLocomotionManager.canRotate = canRotate;
+            character.characterLocomotionManager.canMove = canMove;
 
             character.characterNetworkManager.NotifyServerOfAttackActionAnimationServerRPC
                 (NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);

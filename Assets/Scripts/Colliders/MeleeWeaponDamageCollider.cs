@@ -57,6 +57,7 @@ namespace RS
             damageEffect.fireDamage = fireDamage;
             damageEffect.lightningDamage = lightningDamage;
             damageEffect.holyDamage = holyDamage;
+            damageEffect.contactPoint = contactPoint;
             damageEffect.angleHitFrom =Vector3.SignedAngle(characterCausingDamage.transform.forward, damagedTarget.transform.forward, Vector3.up);
 
             switch (characterCausingDamage.characterCombatManager.currentAttackType)

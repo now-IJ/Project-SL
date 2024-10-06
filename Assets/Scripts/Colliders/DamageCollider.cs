@@ -52,7 +52,7 @@ namespace RS
             damageEffect.fireDamage = fireDamage;
             damageEffect.lightningDamage = lightningDamage;
             damageEffect.holyDamage = holyDamage;
-            
+            damageEffect.contactPoint = contactPoint;
             damagedTarget.characterEffectsManager.ProcessInstantEffects(damageEffect);
         }
 

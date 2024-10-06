@@ -16,7 +16,7 @@ namespace RS
 
         private void OnAnimatorMove()
         {
-            if (player.applyRootMotion)
+            if (player.playerAnimationManager.applyRootMotion)
             {
                 Vector3 velocity = player.animator.deltaPosition;
                 player.characterController.Move(velocity);

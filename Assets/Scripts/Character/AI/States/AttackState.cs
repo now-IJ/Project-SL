@@ -23,6 +23,8 @@ namespace RS
             if (aiCharacter.aiCharacterCombatManager.currentTarget.characterNetworkManager.isDead.Value)
                 return SwitchState(aiCharacter, aiCharacter.idle);
 
+            aiCharacter.aiCharacterCombatManager.RotateTowardsTarget(aiCharacter);
+            
             aiCharacter.characterAnimationManager.UpdateAnimatorMovementParameters(0,0,false);
             
             // Perform Combo
@@ -35,14 +37,14 @@ namespace RS
                 }
             }
 
+            if (aiCharacter.isPerformingAction)
+                return this;
+
             if (!hasPerformedAttack)
             {
                 if (aiCharacter.aiCharacterCombatManager.actionRecoveryTimer > 0)
                     return this;
-
-                if (aiCharacter.isPerformingAction)
-                    return this;
-
+                
                 PerformAttack(aiCharacter);
 
                 return this;

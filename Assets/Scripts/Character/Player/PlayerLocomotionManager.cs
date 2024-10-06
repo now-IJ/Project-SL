@@ -82,7 +82,7 @@ namespace RS
 
         private void HandleGroundedMovement()
         {
-            if(!player.canMove)
+            if(!player.playerLocomotionManager.canMove)
                 return;
             
             SetMovementValues();
@@ -121,7 +121,7 @@ namespace RS
 
         private void HandleFreeFallMovement()
         {
-            if (!player.isGrounded)
+            if (!player.playerLocomotionManager.isGrounded)
             {
                 Vector3 freeFallDirection;
                 
@@ -139,7 +139,7 @@ namespace RS
             if(player.playerNetworkManager.isDead.Value)
                 return;
             
-            if(!player.canRotate)
+            if(!player.playerLocomotionManager.canRotate)
                 return;
 
             if (player.playerNetworkManager.isLockedOn.Value)
@@ -268,7 +268,7 @@ namespace RS
             if(player.playerNetworkManager.isJumping.Value)
                 return;
             
-            if(!player.isGrounded)
+            if(!player.playerLocomotionManager.isGrounded)
                 return;
 
             player.playerAnimationManager.PlayTargetActionAnimation("Main_Jump_Start_01", false);

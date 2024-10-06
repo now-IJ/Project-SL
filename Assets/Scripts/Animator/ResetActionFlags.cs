@@ -15,9 +15,9 @@ namespace RS
             }
 
             character.isPerformingAction = false;
-            character.applyRootMotion = false;
-            character.canMove = true;
-            character.canRotate = true;
+            character.characterAnimationManager.applyRootMotion = false;
+            character.characterLocomotionManager.canMove = true;
+            character.characterLocomotionManager.canRotate = true;
             character.characterLocomotionManager.isRolling = false;
             character.characterAnimationManager.DisableCanDoCombo();
             

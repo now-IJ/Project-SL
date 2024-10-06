@@ -20,6 +20,7 @@ namespace RS
             base.Awake();
 
             player = GetComponent<PlayerManager>();
+            lockOnTargetTransform = GetComponentInChildren<LockOnTransform>().transform;
         }
 
         public void PerformWeaponBasedAction(WeaponItemAction weaponAction, WeaponItem weaponPerformingAction)

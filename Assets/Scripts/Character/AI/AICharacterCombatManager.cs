@@ -20,7 +20,14 @@ namespace RS{
 
         [Header("Attack Rotation Speed")] 
         public float attackRotationSpeed = 25;
-    
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            lockOnTargetTransform = GetComponentInChildren<LockOnTransform>().transform;
+        }
+
         public void FindATargetViaLineOfSight(AICharacterManager aiCharacter)
         {
             if (currentTarget != null)
@@ -112,7 +119,7 @@ namespace RS{
             if(currentTarget == null)
                 return;
             
-            if(!aiCharacter.canRotate)
+            if(!aiCharacter.aiCharacterLocomotionManager.canRotate)
                 return;
 
             if(!aiCharacter.isPerformingAction)
