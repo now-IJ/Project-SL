@@ -20,6 +20,13 @@ namespace RS
             // Check if NavMesh is active
             if (!aiCharacter.navMeshAgent.enabled)
                 aiCharacter.navMeshAgent.enabled = true;
+
+            // Check if target is out of view and then pivot
+            if (aiCharacter.aiCharacterCombatManager.viewableAngle < aiCharacter.aiCharacterCombatManager.minimumFOV ||
+                aiCharacter.aiCharacterCombatManager.viewableAngle > aiCharacter.aiCharacterCombatManager.maximumFOV)
+            {
+                aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
+            }
             
             aiCharacter.aiCharacterLocomotionManager.RotateTowardsAgent(aiCharacter);
 

@@ -59,5 +59,17 @@ namespace RS
 
             return false;
         }
+
+        public float GetAngleOfTarget(Transform characterTransform, Vector3 targetDirection)
+        {
+            targetDirection.y = 0;
+            float viewableAngle = Vector3.Angle(characterTransform.forward, targetDirection);
+            Vector3 cross = Vector3.Cross(characterTransform.forward, targetDirection);
+
+            if (cross.y < 0) 
+                viewableAngle = -viewableAngle;
+            
+            return viewableAngle;
+        }
     }
 }

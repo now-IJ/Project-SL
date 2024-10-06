@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -2181049780165745281}
   - component: {fileID: -584517309724715121}
   - component: {fileID: -2872120040660724614}
-  - component: {fileID: 2675306175567314297}
+  - component: {fileID: -7638205318129747704}
   - component: {fileID: 3073095411700515110}
   - component: {fileID: 494759833140928382}
   - component: {fileID: 4845373367335082641}
@@ -39,7 +39,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2217712673872984425}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 7.5, y: 0, z: -7.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -47,7 +47,7 @@ Transform:
   - {fileID: 8910605219339752434}
   - {fileID: 7704761173945581917}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!95 &1848030927919496186
 Animator:
   serializedVersion: 7
@@ -58,7 +58,7 @@ Animator:
   m_GameObject: {fileID: 2217712673872984425}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 0ad932253e8dc8841948afa5d1a0d051, type: 3}
-  m_Controller: {fileID: 9100000, guid: 796bb03e71c06c9468879009dbfc0ae5, type: 2}
+  m_Controller: {fileID: 9100000, guid: 13d5fbcb623c1464b92ae4f6639b45c1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 222736984
+  GlobalObjectIdHash: 2625633907
   InScenePlacedSourceGlobalObjectIdHash: 3868611817
   DeferredDespawnTick: 0
   Ownership: 1
@@ -350,7 +350,7 @@ MonoBehaviour:
   groundedYVelocity: -20
   fallStartVelocity: -5
   isRolling: 0
---- !u!114 &2675306175567314297
+--- !u!114 &-7638205318129747704
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2217712673872984425}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fe987c4f2fdc2640bd04254642d2717, type: 3}
+  m_Script: {fileID: 11500000, guid: af39f68fd6f62494e982f26c97c5c97f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lastDamageAnimationPlayed: 
@@ -456,9 +456,11 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   currentAttackType: 0
   lockOnTargetTransform: {fileID: 2483714522738287237}
+  viewableAngle: 0
+  targetsDirection: {x: 0, y: 0, z: 0}
   detectionRadius: 15
-  minimumViewableAngle: -35
-  maximumViewableAngle: 35
+  minimumFOV: -35
+  maximumFOV: 35
 --- !u!1 &4561970880579436271
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,15 +626,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0ad932253e8dc8841948afa5d1a0d051, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0ad932253e8dc8841948afa5d1a0d051, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0ad932253e8dc8841948afa5d1a0d051, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0ad932253e8dc8841948afa5d1a0d051, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

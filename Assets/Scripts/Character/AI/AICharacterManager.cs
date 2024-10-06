@@ -40,8 +40,11 @@ namespace RS
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
-            
-            ProcessStateMachine();
+
+            if (IsOwner)
+            {
+                ProcessStateMachine();
+            }
         }
 
         private void ProcessStateMachine()
@@ -55,6 +58,12 @@ namespace RS
 
             navMeshAgent.transform.localPosition = Vector3.zero;
             navMeshAgent.transform.localRotation = Quaternion.identity;
+
+            if (aiCharacterCombatManager.currentTarget != null)
+            {
+                aiCharacterCombatManager.targetsDirection = aiCharacterCombatManager.currentTarget.transform.position - transform.position;
+                aiCharacterCombatManager.viewableAngle = WorldUtilityManager.instance.GetAngleOfTarget(transform, aiCharacterCombatManager.targetsDirection);
+            }
             
             if (navMeshAgent.enabled)
             {
