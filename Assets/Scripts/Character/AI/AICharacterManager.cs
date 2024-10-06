@@ -19,9 +19,9 @@ namespace RS
         [Header("States")] 
         public IdleState idle;
         public PursueTargetState pursueTarget;
-        // Combat Stance
-        // Attack
-
+        public CombatStanceState combatStance;
+        public AttackState attack;
+        
         protected override void Awake()
         {
             base.Awake();
@@ -35,6 +35,13 @@ namespace RS
             pursueTarget = Instantiate(pursueTarget);
 
             currentState = idle;
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            aiCharacterCombatManager.HandleActionRecovery(this);
         }
 
         protected override void FixedUpdate()

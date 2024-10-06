@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RS
 {
-    public class AICharacterAnimatorManager : CharacterAnimationManager
+    public class AICharacterAnimationManager : CharacterAnimationManager
     {
         private AICharacterManager aiCharacter;
 
@@ -23,6 +23,7 @@ namespace RS
                     return;
 
                 Vector3 velocity = aiCharacter.animator.deltaPosition;
+                velocity.y = 0;
 
                 aiCharacter.characterController.Move(velocity);
                 aiCharacter.transform.rotation *= aiCharacter.animator.deltaRotation;
@@ -34,6 +35,7 @@ namespace RS
                     return;
 
                 Vector3 velocity = aiCharacter.animator.deltaPosition;
+                velocity.y = 0;
 
                 aiCharacter.characterController.Move(velocity);
                 

@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace RS
 {
-    [CreateAssetMenu(menuName = "AI/States/Attack Action")]
     public class AICharacterAttackAction : ScriptableObject
     {
         [Header("Attack")] 
@@ -16,7 +15,7 @@ namespace RS
         public int attackWeight = 50;
         public float actionRecoveryTime = 1.5f;
         public float minimumAttackAngle = -35;
-        public float maximumAttackAngle = -35;
+        public float maximumAttackAngle = 35;
         public float minimumAttackRange = 0;
         public float maximumAttackRange = 2;
         

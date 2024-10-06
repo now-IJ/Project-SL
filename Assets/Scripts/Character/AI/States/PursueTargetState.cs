@@ -31,13 +31,18 @@ namespace RS
             aiCharacter.aiCharacterLocomotionManager.RotateTowardsAgent(aiCharacter);
 
             // Check if is in combat range
-
+            if (aiCharacter.aiCharacterCombatManager.distanceToTarget <= aiCharacter.navMeshAgent.stoppingDistance)
+                return SwitchState(aiCharacter, aiCharacter.attack);
+            
             // Check if target is not reachable, go home
 
+            aiCharacter.characterAnimationManager.UpdateAnimatorMovementParameters(0,1,false);
+            
             // Pursue target
             NavMeshPath path = new NavMeshPath();
             aiCharacter.navMeshAgent.CalculatePath(aiCharacter.aiCharacterCombatManager.currentTarget.transform.position, path);
             aiCharacter.navMeshAgent.SetPath(path);
+            
             
             return this;
         }

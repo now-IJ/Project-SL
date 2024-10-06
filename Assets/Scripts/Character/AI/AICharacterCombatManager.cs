@@ -15,7 +15,11 @@ namespace RS{
         public float minimumFOV = -35;
         public float maximumFOV = 35;
 
-        
+        [Header("Recovery")] 
+        public float actionRecoveryTimer = 0;
+
+        [Header("Attack Rotation Speed")] 
+        public float attackRotationSpeed = 25;
     
         public void FindATargetViaLineOfSight(AICharacterManager aiCharacter)
         {
@@ -92,6 +96,48 @@ namespace RS{
             else if (viewableAngle < -90 && viewableAngle >= -180)
             {
                 aiCharacter.characterAnimationManager.PlayTargetActionAnimation("Turn_Left_180", true);
+            }
+        }
+
+        public void RotateTowardsAgent(AICharacterManager aiCharacter)
+        {
+            if (aiCharacter.aiCharacterNetworkManager.isMoving.Value)
+            {
+                aiCharacter.transform.rotation = aiCharacter.navMeshAgent.transform.rotation;
+            }
+        }
+
+        public void RotateTowardsTarget(AICharacterManager aiCharacter)
+        {
+            if(currentTarget == null)
+                return;
+            
+            if(!aiCharacter.canRotate)
+                return;
+
+            if(!aiCharacter.isPerformingAction)
+                return;
+            
+            Vector3 targetDirection = currentTarget.transform.position - aiCharacter.transform.position;
+            targetDirection.Normalize();
+            targetDirection.y = 0;
+
+            if (targetDirection == Vector3.zero)
+                targetDirection = aiCharacter.transform.forward;
+
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+            
+            aiCharacter.transform.rotation = Quaternion.Slerp(aiCharacter.transform.rotation, targetRotation, attackRotationSpeed * Time.deltaTime);
+        }
+        
+        public void HandleActionRecovery(AICharacterManager aiCharacter)
+        {
+            if (actionRecoveryTimer > 0)
+            {
+                if (!aiCharacter.isPerformingAction)
+                {
+                    actionRecoveryTimer -= Time.deltaTime;
+                }
             }
         }
     }

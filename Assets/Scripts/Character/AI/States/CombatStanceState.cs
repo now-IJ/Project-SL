@@ -21,7 +21,7 @@ namespace RS
         protected bool hasRolledForComboChance = false;                 // Roll only once per state, resets after leaving the state
         
         [Header("Engagement Distance")]
-        [SerializeField] protected float maximumEngagementDistance = 5; // The distance needed to swap back to pursue state
+        public float maximumEngagementDistance = 5; // The distance needed to swap back to pursue state
 
         public override AIState Tick(AICharacterManager aiCharacter)
         {
@@ -40,6 +40,8 @@ namespace RS
                 }
             }
 
+            aiCharacter.aiCharacterCombatManager.RotateTowardsAgent(aiCharacter);
+            
             if (aiCharacter.aiCharacterCombatManager.currentTarget == null)
                 return SwitchState(aiCharacter, aiCharacter.idle);
 
@@ -49,7 +51,8 @@ namespace RS
             }
             else
             {
-                
+                aiCharacter.attack.currentAttack = chosenAttack;
+                return SwitchState(aiCharacter, aiCharacter.attack);
             }
 
             if (aiCharacter.aiCharacterCombatManager.distanceToTarget > maximumEngagementDistance)
@@ -67,7 +70,7 @@ namespace RS
             // Sort through possible attacks
             potentialAttacks = new List<AICharacterAttackAction>();
 
-            foreach (AICharacterAttackAction potentialAttack in potentialAttacks)
+            foreach (AICharacterAttackAction potentialAttack in aiCharacterAttacks)
             {
                 if(potentialAttack.minimumAttackRange > aiCharacter.aiCharacterCombatManager.distanceToTarget)
                     continue;
@@ -106,6 +109,7 @@ namespace RS
                     chosenAttack = attack;
                     previousAttack = attack;
                     hasAttack = true;
+                    return;
                 }
             }
         }
