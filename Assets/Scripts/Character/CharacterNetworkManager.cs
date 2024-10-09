@@ -10,9 +10,13 @@ namespace RS
     {
         private CharacterManager character;
 
+        [Header("Active")] 
+        public NetworkVariable<bool> isActive = new NetworkVariable<bool>
+            (true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
         [Header("Status")] 
         public NetworkVariable<bool> isDead = new NetworkVariable<bool>
-        (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+            (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
         [Header("Position")]
         public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>
@@ -123,6 +127,11 @@ namespace RS
         public void OnIsMovingChanged(bool oldStatus, bool newStatus)
         {
             character.animator.SetBool("IsMoving", isMoving.Value);
+        }
+
+        public virtual void OnIsActiveChanged(bool oldStatus, bool newStatus)
+        {
+            gameObject.SetActive(isActive.Value);
         }
         
         // Animation

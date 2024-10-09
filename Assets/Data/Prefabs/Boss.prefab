@@ -2061,6 +2061,7 @@ GameObject:
   - component: {fileID: 486317833131789428}
   - component: {fileID: 6900844822911546552}
   - component: {fileID: 2631057102581890358}
+  - component: {fileID: 4757310078628604017}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -2097,7 +2098,7 @@ Animator:
   m_GameObject: {fileID: 7948285281538165852}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 984beacc2bc950947b0986b6c0273cee, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 13d5fbcb623c1464b92ae4f6639b45c1, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2173,7 +2174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 841903622
+  GlobalObjectIdHash: 313521873
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2265,10 +2266,13 @@ MonoBehaviour:
   aiCharacterLocomotionManager: {fileID: 0}
   navMeshAgent: {fileID: 0}
   currentState: {fileID: 0}
-  idle: {fileID: 0}
-  pursueTarget: {fileID: 0}
-  combatStance: {fileID: 0}
-  attack: {fileID: 0}
+  idle: {fileID: 11400000, guid: 7168ddb38ce6ea4489437f09072e42ad, type: 2}
+  pursueTarget: {fileID: 11400000, guid: 8bb7a502fe7b0ea4098b6dd3c21d0211, type: 2}
+  combatStance: {fileID: 11400000, guid: e18b07207cff7c044862f770761c224a, type: 2}
+  attack: {fileID: 11400000, guid: 9ca2e7dcbe14e054f90d04b6e814fc6c, type: 2}
+  bossID: 0
+  hasBeenDefeated: 0
+  defeatedBossDebug: 0
 --- !u!114 &5761770466927985502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2384,6 +2388,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageGrunts: []
   attackGrunts: []
+--- !u!114 &4757310078628604017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7948285281538165852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bffa1a68e69e46439c9bc7781300f81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  characterGroup: 1
+  lastAttackAnimationPerformed: 
+  currentTarget: {fileID: 0}
+  currentAttackType: 0
+  lockOnTargetTransform: {fileID: 0}
+  distanceToTarget: 0
+  viewableAngle: 0
+  targetsDirection: {x: 0, y: 0, z: 0}
+  detectionRadius: 15
+  minimumFOV: -35
+  maximumFOV: 35
+  actionRecoveryTimer: 0
+  attackRotationSpeed: 25
 --- !u!1 &8116211872353322926
 GameObject:
   m_ObjectHideFlags: 0

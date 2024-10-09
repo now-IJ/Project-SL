@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5591606080645592807}
   - component: {fileID: 1597736292889639589}
   - component: {fileID: 8138177987419283829}
+  - component: {fileID: 5847775785428014450}
   m_Layer: 0
   m_Name: World Network Manager
   m_TagString: Untagged
@@ -52,7 +53,7 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 6022846084395828460, guid: d5c25458b16c32141930792ed164cccf, type: 3}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: a30e2c00d17cd1049aa0531885ffcc8f, type: 2}
+      - {fileID: 11400000, guid: bfa305107c7a34e47863814a0a52ae44, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -104,3 +105,16 @@ MonoBehaviour:
     PacketDelayMS: 0
     PacketJitterMS: 0
     PacketDropRate: 0
+--- !u!114 &5847775785428014450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4120778051655038870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42b3a728c3051984bbb4159d42fcc5ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []

@@ -14,7 +14,7 @@ namespace RS
 
         [Header("Time Played")] 
         public float secondsPlayed;
-
+        
         [Header("World Coordinates")] 
         public float xPosition;
         public float yPosition;
@@ -27,5 +27,15 @@ namespace RS
         [Header("Stats")] 
         public int vitality;
         public int endurance;
+
+        [Header("Bosses")] 
+        public SerializableDictionary<int, bool> bossesAwakend;
+        public SerializableDictionary<int, bool> bossesDefeated;
+
+        public CharacterSaveData()
+        {
+            bossesAwakend = new SerializableDictionary<int, bool>();
+            bossesDefeated = new SerializableDictionary<int, bool>();
+        }
     }
 }

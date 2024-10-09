@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -51,7 +53,7 @@ namespace RS
                 Debug.Log("Creating Save file, at save path: " + savePath);
 
                 // serialize the C# game data into JSON
-                string dataToStore = JsonUtility.ToJson(characterSaveData, true);
+                string dataToStore = JsonConvert.SerializeObject(characterSaveData);
 
                 // Write the file to the system
                 using (FileStream stream = new FileStream(savePath, FileMode.Create))
@@ -94,7 +96,7 @@ namespace RS
                     }
 
                     // Deserialize the data from JSON back to Unity
-                    characterData = JsonUtility.FromJson<CharacterSaveData>(dataToLoad);
+                    characterData = JsonConvert.DeserializeObject<CharacterSaveData>(dataToLoad);
                 }
                 catch (Exception ex)
                 {
