@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.VisualScripting;
 
 namespace RS
 {
@@ -8,7 +10,11 @@ namespace RS
     {
         public int bossID = 0;
         [SerializeField] private bool hasBeenDefeated;
+        [SerializeField] private bool hasBeenAwakened;
+        [SerializeField] private List<FogWallInteractable> fogWalls;
 
+        [Header("DEBUG MENU")] [SerializeField]
+        private bool wakeBossUp = false;
         
         public override void OnNetworkSpawn()
         {
@@ -26,13 +32,59 @@ namespace RS
                 else
                 {
                     hasBeenDefeated = WorldSaveGameManager.instance.currentCharacterData.bossesDefeated[bossID];
-
-                    if (hasBeenDefeated)
+                    hasBeenAwakened = WorldSaveGameManager.instance.currentCharacterData.bossesAwakend[bossID];
+                    
+                }
+                
+                // Locate Fog wall
+                StartCoroutine(GetFogWallsFromWorldObjectManager());
+                
+                if (hasBeenAwakened)
+                {
+                    for(int i =0; i < fogWalls.Count; i++)
                     {
-                        aiCharacterNetworkManager.isActive.Value = false;
+                        fogWalls[i].isActive.Value = true;
                     }
                 }
+                
+                if (hasBeenDefeated)
+                {
+                    for(int i =0; i < fogWalls.Count; i++)
+                    {
+                        fogWalls[i].isActive.Value = false;
+                    }
+                    
+                    aiCharacterNetworkManager.isActive.Value = false;
+                }
             }
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (wakeBossUp)
+            {
+                wakeBossUp = false;
+                WakeBoss();
+            }
+        }
+
+        public IEnumerator GetFogWallsFromWorldObjectManager()
+        {
+            while (WorldObjectManager.instance.fogWalls.Count == 0)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            
+            fogWalls = new List<FogWallInteractable>();
+                
+            foreach (var fogWall in WorldObjectManager.instance.fogWalls)
+            {
+                if(fogWall.fogWallID == bossID)
+                    fogWalls.Add(fogWall);
+            }
+
         }
         
         public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
@@ -75,6 +127,27 @@ namespace RS
             
             // Award player with runes
         }
-        
+
+        public void WakeBoss()
+        {
+            hasBeenAwakened = true;
+            
+            // if save data doesnt contains information about this boss, add it
+            if (!WorldSaveGameManager.instance.currentCharacterData.bossesAwakend.ContainsKey(bossID))
+            {
+                WorldSaveGameManager.instance.currentCharacterData.bossesAwakend.Add(bossID, true);
+            }
+            // Otherwise load the data
+            else
+            {
+                WorldSaveGameManager.instance.currentCharacterData.bossesAwakend.Remove(bossID);
+                WorldSaveGameManager.instance.currentCharacterData.bossesAwakend.Add(bossID, true);
+            }
+
+            for (int i = 0; i < fogWalls.Count; i++)
+            {
+                fogWalls[i].isActive.Value = true;
+            }
+        }
     }
 }
