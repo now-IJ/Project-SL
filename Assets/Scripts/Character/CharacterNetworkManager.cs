@@ -58,6 +58,9 @@ namespace RS
         
         public NetworkVariable<bool> isChargingAttack = new NetworkVariable<bool>
             (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        
+        public NetworkVariable<bool> isInvulnerable = new NetworkVariable<bool>
+            (false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         
         [Header("Stats")] 

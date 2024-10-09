@@ -38,6 +38,9 @@ namespace RS
         
         public override void ProcessEffect(CharacterManager character)
         {
+            if(character.characterNetworkManager.isInvulnerable.Value)
+                return;
+            
             base.ProcessEffect(character);
             
             // Don't apply damage to dead character

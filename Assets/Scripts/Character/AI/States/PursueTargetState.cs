@@ -6,6 +6,8 @@ namespace RS
     [CreateAssetMenu(menuName = "AI/States/Pursue Target")]
     public class PursueTargetState : AIState
     {
+        [SerializeField] protected bool enablePivot = true;
+        
         public override AIState Tick(AICharacterManager aiCharacter)
         {
 
@@ -22,12 +24,17 @@ namespace RS
                 aiCharacter.navMeshAgent.enabled = true;
 
             // Check if target is out of view and then pivot
-            if (aiCharacter.aiCharacterCombatManager.viewableAngle < aiCharacter.aiCharacterCombatManager.minimumFOV ||
-                aiCharacter.aiCharacterCombatManager.viewableAngle > aiCharacter.aiCharacterCombatManager.maximumFOV)
+            if (enablePivot)
             {
-                aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
+                if (aiCharacter.aiCharacterCombatManager.viewableAngle <
+                    aiCharacter.aiCharacterCombatManager.minimumFOV ||
+                    aiCharacter.aiCharacterCombatManager.viewableAngle >
+                    aiCharacter.aiCharacterCombatManager.maximumFOV)
+                {
+                    aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
+                }
             }
-            
+
             aiCharacter.aiCharacterLocomotionManager.RotateTowardsAgent(aiCharacter);
 
             // Check if is in combat range

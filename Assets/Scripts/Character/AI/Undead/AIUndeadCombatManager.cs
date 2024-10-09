@@ -16,11 +16,9 @@ namespace RS
         public void SetAttack01Damage()
         {
             attackDamageCollider.physicalDamage = baseDamage * attack01DamageModifier;
-            attackDamageCollider.physicalDamage = baseDamage * attack01DamageModifier;
         }
         public void SetAttack02Damage()
         {
-            footDamageCollider.physicalDamage = baseDamage * attack02DamageModifier;
             footDamageCollider.physicalDamage = baseDamage * attack02DamageModifier;
         }
 

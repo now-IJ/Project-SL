@@ -47,5 +47,21 @@ namespace RS
                 }
             }
         }
+
+        public void EnableIsInvulnerable()
+        {
+            if (IsOwner)
+            {
+                character.characterNetworkManager.isInvulnerable.Value = true;
+            }
+        }
+
+        public void DisableIsInvulnerable()
+        {
+            if (IsOwner)
+            {
+                character.characterNetworkManager.isInvulnerable.Value = false;
+            }
+        }
     }
 }

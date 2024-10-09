@@ -22,6 +22,9 @@ namespace RS
         
         [Header("Engagement Distance")]
         public float maximumEngagementDistance = 5; // The distance needed to swap back to pursue state
+        
+        [Header("Pivot")]
+        [SerializeField] protected bool enabledPivot;
 
         public override AIState Tick(AICharacterManager aiCharacter)
         {
@@ -31,12 +34,15 @@ namespace RS
             if (!aiCharacter.navMeshAgent.enabled)
                 aiCharacter.navMeshAgent.enabled = true;
 
-            if (!aiCharacter.aiCharacterNetworkManager.isMoving.Value)
+            if (enabledPivot)
             {
-                if (aiCharacter.aiCharacterCombatManager.viewableAngle < -30 ||
-                    aiCharacter.aiCharacterCombatManager.viewableAngle > 30)
+                if (!aiCharacter.aiCharacterNetworkManager.isMoving.Value)
                 {
-                    aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
+                    if (aiCharacter.aiCharacterCombatManager.viewableAngle < -30 ||
+                        aiCharacter.aiCharacterCombatManager.viewableAngle > 30)
+                    {
+                        aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
+                    }
                 }
             }
 
