@@ -4,6 +4,8 @@ namespace RS
 {
     public class AIBossCombatManager : AICharacterCombatManager
     {
+        private AIBossCharacterManager aiBossCharacter;
+        
         [Header("Damage Colliders")]
         [SerializeField] private BossDamageCollider attackDamageCollider;
 
@@ -11,6 +13,13 @@ namespace RS
         [SerializeField] private int baseDamage = 25;
         [SerializeField] private float attack01DamageModifier = 1.0f;
         [SerializeField] private float attack02DamageModifier = 1.4f;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            aiBossCharacter = GetComponent<AIBossCharacterManager>();
+        }
 
         public void SetAttack01Damage()
         {
@@ -24,6 +33,7 @@ namespace RS
         {
             aiCharacter.characterSoundFXManager.PlayAttackGrunt();
             attackDamageCollider.EnableDamageCollision();
+            aiBossCharacter.characterSoundFXManager.PlayAttackGrunt();
         }
 
         public void CloseAttackDamageCollider()
